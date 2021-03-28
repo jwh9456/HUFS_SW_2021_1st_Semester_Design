@@ -1,0 +1,1 @@
+def get_valid_plays(prev, hand, generate=generate_plays, is_valid=is_valid_play):got 

@@ -1,0 +1,11 @@
+num_card = 7
+i = 3
+
+for j in range(5)
+j=1
+    gap = card-value(cards[1+7-1])- card_value(cards[1])+1 //손패중 가장 큰 패의 밸류
+    if gap == 3:
+        retval.append(cards[1:4])
+    return retval
+
+1. 의외로 straight는 바꿀게 없었습니다? i=3으로 수정하면 리턴값이 정직하게 잘 나왔습니다. RANKS 맨 마지막에 B를 넣어두면 알아서 인덱스 반환 잘 해요
