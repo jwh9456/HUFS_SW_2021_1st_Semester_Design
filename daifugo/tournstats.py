@@ -36,7 +36,7 @@ if __name__ == "__main__":
     played = playcount[key]
     won = wincount[key]
 
-    print "Player {0}: {1}/{2} ({3:.1f}%)".format(key, won, played, float(won)/played*100)
+    print ("Player {0}: {1}/{2} ({3:.1f}%)").format(key, won, played, float(won)/played*100)
 
 
 

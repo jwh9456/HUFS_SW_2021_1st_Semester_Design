@@ -33,8 +33,8 @@ if __name__ == "__main__":
     win_count = defaultdict(int)
     players=(p1,p2,p3,p4)
     for i in range(opts.niter):
-        print i
+        print (i)
         winner, _, _ = game.play_game(players)
         win_count[winner[-1]] += 1
-    print win_count
+    print (win_count)
     

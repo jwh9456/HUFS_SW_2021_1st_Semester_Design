@@ -86,6 +86,6 @@ for p in sorted(player_index, key=lambda l:player_index[l].skill, reverse=True):
 
 
             
-print CGI_HEADER
-print PAGE_TEMPLATE.format(body=body)
+print (CGI_HEADER)
+print (PAGE_TEMPLATE.format(body=body))
 

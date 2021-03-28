@@ -86,22 +86,22 @@ def get_python_source(form, form_field):
         return None
     fileitem = form[form_field]
     if not fileitem.file:
-        raise ValueError, "field is not a file"
+        raise (ValueError, "field is not a file")
     if not fileitem.filename:
-        raise ValueError, "no file specified"
+        raise (ValueError, "no file specified")
     ext = os.path.splitext(fileitem.filename)[1]
     if ext.lower() != '.py':
-        raise ValueError, "filename did not end in .py"
+        raise (ValueError, "filename did not end in .py")
         
     source = fileitem.file.read().replace('\r\n','\n')
     try:
         compile(source, '', 'exec')
-    except SyntaxError, e:
+    except SyntaxError as e:
         etype = e.__class__.__name__
-        raise ValueError, "{0} : {1} {2}".format(etype, str(e), (e.filename, e.lineno, e.offset, e.text))
-    except Exception, e:
+        raise (ValueError, "{0} : {1} {2}".format(etype, str(e), (e.filename, e.lineno, e.offset, e.text)))
+    except Exception as e:
         etype = e.__class__.__name__
-        raise ValueError, "file is not valid python code ({0}: {1})".format(etype, str(e))
+        raise (ValueError, "file is not valid python code ({0}: {1})".format(etype, str(e)))
         
     return source
     
@@ -118,7 +118,7 @@ form = cgi.FieldStorage()
 body = ""
 try:
     source = get_python_source(form, "file_1")
-except ValueError, e:
+except ValueError as e:
     source = None
     body += "<h2>{0}: {1}</h2><br>".format(e.__class__.__name__,e) 
 
@@ -134,7 +134,7 @@ else:
         body += "<p>Not adding player, testing only.</p>"
     try:
         student_code, student_output = sandbox.as_module(source)
-    except Exception, e:
+    except Exception as e:
         body += "<p>The following exception was raised when importing your code:</p>"
         body += "<h2>{0}: {1}</h2><br>".format(e.__class__.__name__,e) 
         student_code = None
@@ -175,7 +175,7 @@ else:
 template_values = {}
 template_values['BODY'] = body
 
-print 'Content-Type: text/html'
+print ('Content-Type: text/html')
 print
-print HTML_TEMPLATE % template_values
+print (HTML_TEMPLATE % template_values)
 

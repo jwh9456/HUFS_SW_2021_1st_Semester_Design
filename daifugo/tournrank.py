@@ -49,5 +49,5 @@ if __name__ == "__main__":
 
   for p in sorted(player_index, key=lambda l:player_index[l].skill, reverse=True):
     pl = player_index[p]
-    print "{0}: mu={1[0]:.3f} sigma={1[1]:.3f}".format(p, pl.skill)
+    print ("{0}: mu={1[0]:.3f} sigma={1[1]:.3f}").format(p, pl.skill)
 

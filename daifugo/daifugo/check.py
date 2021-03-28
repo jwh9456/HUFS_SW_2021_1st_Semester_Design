@@ -43,7 +43,7 @@ def compare_solutions(canonical, user, t_args=[], t_kwargs={}, transform=None):
     expval = canonical(*t_args, **t_kwargs)
     try:
         userval = user(*t_args, **t_kwargs)
-    except Exception, e:
+    except Exception as e:
         return False, e, expval
     retval = test_equal(userval, expval, transform), userval, expval
     return retval

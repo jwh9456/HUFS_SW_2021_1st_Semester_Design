@@ -74,9 +74,9 @@ def player_count():
     return len(os.listdir(PLAYERS_DIR))
 
 def display_page(body):
-    print 'Content-Type: text/html'
+    print ('Content-Type: text/html')
     print
-    print HTML_TEMPLATE.format(body=body)
+    print (HTML_TEMPLATE.format(body=body))
 
 def generate_select(name, options, selected = None):
     opt_html = []
@@ -123,7 +123,7 @@ try:
 
     for winner, round, hands in zip(*game_trace):
         round_count += 1
-        play_names = cycle(chosen[(i+prev_winner)%4] for i in xrange(4))
+        play_names = cycle(chosen[(i+prev_winner)%4] for i in range(4))
     
         body += lists2ul(['HANDS', ["{0}({2}): {1}".format(p,str(sorted(h)),len(h)) for p,h in zip(chosen,hands)]])
         body += lists2ul(['ROUND {0}'.format(round_count),["{0}: {1}".format(*x) for x in zip(play_names,round)]])
@@ -131,12 +131,12 @@ try:
         prev_winner = winner
     logger.info('players: {0} winner {1}'.format(chosen, chosen[winner]), extra=env_info)
 
-except game.InvalidAction,e :
+except game.InvalidAction as e :
     body += "<p>Invalid Action: {0}</p>".format(e)
     body += "<p>Please remain calm. This incident has been logged.</p>"
     logger.info('InvalidAction: {1} players:{0}'.format(chosen, str(e)), extra=env_info)
     
-except Exception, e:
+except Exception as e:
     body += "<p>Exception Occurred:</p>"
     body += "<p>{0}: {1}</p>".format(e.__class__.__name__, str(e))
     body += "<p>Please remain calm. This incident has been logged.</p>"

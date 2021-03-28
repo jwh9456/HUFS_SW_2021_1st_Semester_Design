@@ -50,16 +50,16 @@ if __name__ == "__main__":
 
   if opts.reason:
     if opts.qual and t_pass:
-      print "{0}: {1}".format(opts.input, "qualified")
+      print ("{0}: {1}".format(opts.input, "qualified"))
     elif opts.disq and not t_pass:
-      print "{0}: {1}".format(opts.input, fail_reason)
+      print ("{0}: {1}".format(opts.input, fail_reason))
     else:
-      print "{0}: {1}".format(opts.input, "WTF")
+      print ("{0}: {1}".format(opts.input, "WTF"))
   else:
     if opts.qual and t_pass:
-      print opts.input
+      print (opts.input)
     elif opts.disq and not t_pass:
-      print opts.input
+      print (opts.input)
     else:
-      print "{0}: {1}".format(opts.input, "WTF")
+      print ("{0}: {1}".format(opts.input, "WTF"))
 

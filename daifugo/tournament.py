@@ -43,13 +43,13 @@ if __name__ == "__main__":
   random.seed(opts.seed)
   deck = game.deal()
 
-  for i in xrange(opts.numiter):
+  for i in range(opts.numiter):
     players = random.sample(all_players, 4)
     try:
       with sandbox.redirect_stdout(open('/dev/null','w')):
         game_trace = game.play_game([all_players[p].play for p in players], 'pass', initial_deal=deck)
       output.write(','.join(map(str,players)+[str(game_trace[0][-1])]) + '\n')
-    except Exception, e:
+    except Exception as e:
       pass
         
        
