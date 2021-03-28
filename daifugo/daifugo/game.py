@@ -19,14 +19,15 @@ def get_deck(shuffle=False):
     deck = [''.join(c) for c in product(ranks, suits)]
     if shuffle:
         random.shuffle(deck)
+    deck.append('BB') #BB는 조커를 뜻해요
     return deck
 
 def deal(players=4):
     deck = get_deck(shuffle=True)
-    hands = tuple(set() for i in xrange(players))
+    hands = tuple(set() for i in range(players))
     players = cycle(hands)
     for card in deck:
-        player = players.next()
+        player = next(players)
         player.add(card)
     return hands
 
@@ -44,7 +45,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
     Execute simulation of one round of gameplay.
     """
     if invalid_action not in ['pass', 'raise']:
-        raise ValueError, "invalid_action cannot be '{0}'".format(invalid_action)
+        raise (ValueError, ("invalid_action cannot be '{0}'").format(invalid_action))
     num_players = len(players)
     assert len(hands) == num_players
     
@@ -73,8 +74,8 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             # TODO: impose timelimit
             play = player(*args, **kwargs)
                
-        except Exception, e:
-            if DEBUG: print "  {0} failed with exception: '{1}'".format(index, e)
+        except Exception as e:
+            if DEBUG: print ("  {0} failed with exception: '{1}'").format(index, e)
             if invalid_action == 'pass':
                 play = None
             elif invalid_action == 'raise':
@@ -82,14 +83,14 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
 
         if DEBUG: 
           if play is None:
-            print "  {0} ({2} cards) --> {1}".format(index, "pass", len(hands[index]))
+            print ("  {0} ({2} cards) --> {1}").format(index, "pass", len(hands[index]))
           else:
-            print "  {0} ({2} cards) --> {1}".format(index, play, len(hands[index])-len(play))
+            print ("  {0} ({2} cards) --> {1}").format(index, play, len(hands[index])-len(play))
 
         # need to check a play is a valid play
         if play and frozenset(play) not in map(frozenset,common.generate_plays(hand)):
             if DEBUG: 
-                print "  {0} invalid play {1}".format(index, play)
+                print ("  {0} invalid play {1}").format(index, play)
             # Force player to pass if their play is invalid
             if invalid_action=='pass':
                 play = None
@@ -99,7 +100,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         if prev is None:
             if play is None:
                 if DEBUG: 
-                    print "  {0} passed as first player".format(index)
+                    print ("  {0} passed as first player").format(index)
                 if invalid_action=='pass':
                     play = None
                 elif invalid_action =='raise':
@@ -109,7 +110,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             # need to check a play is valid in the context of the previous play
             if not common.is_valid_play(prev, play):
                 if DEBUG: 
-                    print "  {0} invalid play {1} -> {2}".format(index, prev, play)
+                    print ("  {0} invalid play {1} -> {2}").format(index, prev, play)
                 # Force player to pass if their play is invalid
                 if invalid_action=='pass':
                     play = None
@@ -127,13 +128,13 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
 
         # Assess end of round
         if len(hands[index]) == 0:
-            if DEBUG: print "ROUND OVER: Player {0} wins".format(index)
+            if DEBUG: print ("ROUND OVER: Player {0} wins").format(index)
             return hands, last_player, True, discard
         elif pass_count == num_players:
-            if DEBUG: print "ROUND OVER: All passed - LP {0}".format(last_player)
+            if DEBUG: print ("ROUND OVER: All passed - LP {0}").format(last_player)
             return hands, last_player, False, discard
         elif prev is not None and prev[-1][0] == '2':
-            if DEBUG: print "ROUND OVER: 2 played - LP {0}".format(last_player)
+            if DEBUG: print ("ROUND OVER: 2 played - LP {0}").format(last_player)
             return hands, last_player, False, discard
         index = (index+1) % num_players
 

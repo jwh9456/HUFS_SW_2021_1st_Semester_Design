@@ -38,7 +38,7 @@ class KThread(threading.Thread):
     try:
       with redirect_stdout(outstream):
         val = self._Thread__target(*self._Thread__args, **self._Thread__kwargs)
-    except Exception, e:
+    except Exception as e:
       val = sys.exc_info()
       success = False
     output = outstream.getvalue()
@@ -130,7 +130,7 @@ def as_module(source, name='module'):
     output = StringIO()
     with contextlib.nested(redirect_stdout(output), working_directory()):
         with contextlib.nested(*resource_cm):
-            exec source in module.__dict__
+            exec (source in module.__dict__)
     return module, output.getvalue()
 
 def get_player(path):
@@ -237,7 +237,7 @@ def test_play(student):
         prev_lp = lp
         try:
             hands, lp, game_over, discard = game.play_round(hands, players, discard, lp, 'raise')
-        except game.InvalidAction, e:
+        except game.InvalidAction as e:
             retval.append(['INVALID ACTION', [e, e.call]])
             t_pass = False
             break
