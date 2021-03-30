@@ -1,3 +1,8 @@
+대부호 카드게임 소스 뜯어고쳐서 MCTS & Q-Learning 적용
+
+
+###################################################
+
 This is the Daifugo playground for FoC S1 2012
 
 It contains the daifugo playing harness, as well as
