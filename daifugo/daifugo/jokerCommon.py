@@ -1,23 +1,3 @@
-from collections import defaultdict
-from itertools import combinations
-import daifugo.common as common
-
-
-REV = common.REV
-ORG_RANKS = '34567890JQKA2B'
-REV_RANKS = '2AKQJ09876543B'
-
-def cards_by_index(cardset, index):
-    retval = defaultdict(list)       #카드 분류.. 같은 숫자가 3개 잇으면 머가 3개 잇는지 알려줌
-    for card in cardset:
-        rank = card[index]
-        retval[rank].append(card)
-    return retval
-
-def card_value(card):
-    if REV:
-        return REV_RANKS.index(card[0])
-    return ORG_RANKS.index(card[0]) #카드의 rank를 알려줌
 
 def straightsJoker(cards): #player가 조커를 가지고 있을 경우 straigth 가능한 수 알려주는 함수
 
@@ -66,38 +46,3 @@ def straightsJoker(cards): #player가 조커를 가지고 있을 경우 straigth
                 retval.append(straight)
 
     return retval
-
-
-cards = ['3', '4', '8', 'B', 'A', '0']
-joker = cards_by_index(cards, 0)
-
-
-for elem in straightsJoker(joker):
-    print(">", end= "")
-    print(elem)
-
-"""
-print("/* 혁명 */")
-REV = True
-for elem in straightsJoker(joker):
-    print(elem)
-"""
-'''
-['5', '6', 'B']
-['B', '5', '6']
-['6', 'B', '8']
-['8', '9', '0']
-['8', '9', 'B']
-['B', '8', '9']
-['9', '0', 'B']
-['B', '9', '0']
-/* 혁명 */
-['0', '9', '8']
-['0', '9', 'B']
-['B', '0', '9']
-['9', '8', 'B']
-['B', '9', '8']
-['8', 'B', '6']
-['6', '5', 'B']
-['B', '6', '5']
-'''
