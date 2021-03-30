@@ -2,7 +2,7 @@
 Common methods used for daifugo playing.
 """
 from collections import defaultdict
-from itertools import combinations
+from itertools import combinations,permutations
 
 REV = False
 
@@ -55,7 +55,7 @@ def straights(cards):   #straights 판단해주는 함수
 
 def straights_joker(cards):  #cards는 각각의 순열들
    i = len(cards)
-   lrank=list(RANKS)
+   lrank=list(ORG_RANKS)
 
    if 'BB' in cards:  #조커가 있을 경우
        j = 0
@@ -68,7 +68,7 @@ def straights_joker(cards):  #cards는 각각의 순열들
            elif n2 == 'BB':                         #n2가 조커인 경우
                temp = card_value(n1)
 
-               if len(RANKS)-2 != temp:             #조커 앞의 카드가 2(가장강한카드)가 아니라면, 조커자리에 n1보다
+               if len(ORG_RANKS)-2 != temp:             #조커 앞의 카드가 2(가장강한카드)가 아니라면, 조커자리에 n1보다
                    cards[j+1] = lrank[temp+1]       #한 계단 높은 카드를 삽입하고, 그 뒤의 카드들의 rank 순차적 판단
                    j+=1
                    continue
@@ -194,7 +194,7 @@ def is_valid_play(prev, play, debug=False):
         else:
             return True
     else:
-        # Previous play is a rankset
+        # Previous play is a ORG_RANKSet
         if len(play) != len(prev):
             # Wrong number of cards
             if debug: print ("INVALID: {0} has wrong number of cards").format(play)
