@@ -43,6 +43,16 @@ def deal(players=4):  # 카드 배분하기
         '''
     return hands
 
+def hachikire(play):  #하치키레 구현
+    roundOver = False
+
+    for i in range(len(play)):
+        if common.card_value(play[i]) == 5: #기본 상태에서 8의 value는 5
+            roundOver = True
+            return roundOver
+
+    return roundOver
+
 
 ##class Exception(*args : object)##
 
@@ -172,6 +182,12 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         discard[-1].append(play)
         print("해당 카드를 버립니다.")
         print(discard[-1])
+        
+        if len(play) >= 4:
+            if common.REV:
+                common.REV = False
+            else:
+                common.REV = True
 
         if play is None:  #선택한 게 없으면
             pass_count += 1  # pass_count 한 번 추가
@@ -181,6 +197,8 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             prev = play # prev = 전에 버린 카드
             pass_count = 0 # pass_count 리셋
             last_player = index # 낸 사람이 마지막 사람이 됨.
+            
+        hachikire = hachikire(play)
 
         # Assess end of round
         if len(hands[index]) == 0:
@@ -198,6 +216,10 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             if DEBUG: print("ROUND OVER: 2 played - LP {0}".format(last_player))
             # 마지막 사람이 이김
             return hands, last_player, False, discard
+        elif hachikire:
+            if DEBUG:
+                print("ROUND OVER: hachikire - LP {0}".format(last_player))
+                return hands, last_player, False, discard
 
         index = (index+1) % num_players
         print("{0} 번 플레이어로 차례가 넘어갑니다.\n".format(index))

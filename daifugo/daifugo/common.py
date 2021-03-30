@@ -3,8 +3,11 @@ Common methods used for daifugo playing.
 """
 from collections import defaultdict
 from itertools import combinations
-RANKS = '34567890JQKA2B'
-REV_RANKS = "2AKQJ09876543B"
+
+REV = False
+
+ORG_RANKS = '34567890JQKA2B'
+REV_RANKS = '2AKQJ09876543B'
 
 def cards_by_index(cardset, index):
     """
@@ -17,10 +20,9 @@ def cards_by_index(cardset, index):
     return retval
 
 def card_value(card):
-    """
-    Return an index value that can be used for comparing cards
-    """
-    return RANKS.index(card[0])
+    if REV:
+        return REV_RANKS.index(card[0])
+    return ORG_RANKS.index(card[0])
 
 def straights(cards):   #straights 판단해주는 함수
     cards = sorted(cards, key=card_value)    #rank순으로 카드 정렬 ex) cards = [3H,4H,5H,2H]
