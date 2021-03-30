@@ -102,5 +102,3 @@ def get_valid_plays(prev, hand, generate=generate_plays, is_valid=is_valid_play)
     Produce a list of valid plays given a previous play and a current hand.
     """
     return [ p for p in generate(hand) if is_valid(prev, p) ]
-
-
