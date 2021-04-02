@@ -1,6 +1,7 @@
 '''
 Daifugo player backend.
 '''
+import common
 import random
 import copy
 from itertools import product, cycle
@@ -8,7 +9,7 @@ import time
 random.seed(time.time())
 import cgi
 DEBUG = False  #??  --> interactive.py // game.DEBUG = True
-import common  # 같은 폴더에 있는 파일
+  # 같은 폴더에 있는 파일
 
 def get_deck(shuffle=False):
     suits = 'CSDH'

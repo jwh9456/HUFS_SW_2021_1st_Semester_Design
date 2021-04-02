@@ -171,6 +171,9 @@ def straightsJoker(cards): #player가 조커를 가지고 있을 경우 straigth
 
     return retval
 
+#test
+prev = ['B','5','5']
+
 def is_valid_play(prev, play, debug=False):
     """
     Determine if a play is valid given a previous play
