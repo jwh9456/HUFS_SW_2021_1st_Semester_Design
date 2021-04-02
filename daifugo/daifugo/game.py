@@ -1,7 +1,7 @@
 '''
 Daifugo player backend.
 '''
-import common
+import daifugo.common as common
 import random
 import copy
 from itertools import product, cycle
@@ -228,7 +228,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
 
 
 def play_game(players, invalid_action='raise', initial_deal=None):  # invalid_action = 'raise'
-    assert all(callable(p) for p in players)
+    # assert all(callable(p) for p in players)
     # assert는 뒤의 조건이 True가 아니면 AssertError를 발생
 
     print("::::::::::대부호 게임 시작::::::::::\n")
