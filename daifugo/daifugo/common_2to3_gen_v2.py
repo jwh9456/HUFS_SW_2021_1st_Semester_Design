@@ -44,18 +44,11 @@ def straights(cards):      #straights 판단해주는 함수
                                               #연속된 세 자리 straights부터해서 카드의 갯수 만큼의 straights판단
         per = permutations(cards, 3)          #cards에서 나올 수 있는 모든 순열 경우의 수 계산
         nof = list(per)                       #nof는 nP3부터 nPn까지의 순열 경우의수가 들어있는 list
-
-
         for j in nof:             #j는 각각의 순열 튜플
             test = straights_jkoer(list(j))
             if test:                #j가 straights라면, retval_j에 append
                 retval_j.append(j)
-
-
-
-
         return retval_j
-
     return retval
 
 def straights_jkoer(cards):  #cards는 각각의 순열들
