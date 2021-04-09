@@ -7,8 +7,9 @@ import copy
 from itertools import product, cycle
 import time
 random.seed(time.time())
-import cgi
-DEBUG = False  #??  --> interactive.py // game.DEBUG = True
+DEBUG = True
+import interactive
+import html
   # 같은 폴더에 있는 파일
 
 def get_deck(shuffle=False):
@@ -44,7 +45,7 @@ def deal(players=4):  # 카드 배분하기
         '''
     return hands
 
-def hachikire(play):  #하치키레 구현
+def ishachikire(play):  #하치키레 구현
     roundOver = False
 
     for i in range(len(play)):
@@ -119,7 +120,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         try:
             # TODO: Suppress stdout
             # TODO: impose timelimit
-            play = player(*args, **kwargs)
+            play = interactive.play(prev, hand, discard, holding)
             print("해당 카드를 선택했습니다.")
             print(play)
 
@@ -129,7 +130,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             if invalid_action == 'pass':
                 play = None
             elif invalid_action == 'raise':
-                raise InvalidAction("player {0} raised {1}: '{2}'".format(index, cgi.escape(e.__class__.__name__), e), call_str)
+                raise InvalidAction("player {0} raised {1}: '{2}'".format(index, html.escape(e.__class__.__name__), e), call_str)
 
                 '''
                  HTML 문법으로 이미 사용되고있는 문자열을 온전하게 표시하기 위해서는
@@ -184,7 +185,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         print("해당 카드를 버립니다.")
         print(discard[-1])
         
-        if len(play) >= 4:
+        if paly is not None and len(play) >= 4:
             if common.REV:
                 common.REV = False
             else:
@@ -217,7 +218,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             if DEBUG: print("ROUND OVER: 2 played - LP {0}".format(last_player))
             # 마지막 사람이 이김
             return hands, last_player, False, discard
-        elif hachikire:
+        elif play is not None and hachikire:
             if DEBUG:
                 print("ROUND OVER: hachikire - LP {0}".format(last_player))
                 return hands, last_player, False, discard
