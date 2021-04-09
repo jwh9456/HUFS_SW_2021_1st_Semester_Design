@@ -1,7 +1,7 @@
 '''
 Daifugo player backend.
 '''
-import daifugo.common as common
+import common as common
 import random
 import copy
 from itertools import product, cycle

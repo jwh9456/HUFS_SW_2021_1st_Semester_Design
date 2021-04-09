@@ -1,6 +1,6 @@
-import daifugo.game as g
-import daifugo.common as c
-import players.interactive as playerInstance
+import game as g
+import common as c
+import interactive as playerInstance
 
 
 print("######## 대부호 카드 게임 시작 ########")

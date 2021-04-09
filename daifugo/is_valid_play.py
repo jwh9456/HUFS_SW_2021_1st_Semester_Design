@@ -70,8 +70,6 @@ def is_valid_play(prev, play, debug=False):
             return True
 
 
-#test
-prev = ['B','5','5']
 
 
 if card_value(prev[0]) == 13:
