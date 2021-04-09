@@ -103,7 +103,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
     while True:
         player = players[index]
         hand = hands[index]
-        holding = tuple(len(hands[(index+i)%num_players]) for i in range(1,num_players)) 
+        holding = tuple(len(hands[(index+i)%num_players]) for i in range(num_players)) 
         #3명..?? 4명으로 돌리려면 range(num_players)로 범위 바꾸기
         
         print("각자 가지고 있는 카드의 개수")
