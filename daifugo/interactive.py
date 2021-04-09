@@ -4,8 +4,9 @@ Interactive player.
 import common as common
 import sys
 from collections import defaultdict
+import common
 
-def play(prev, hand, discard, holding, valid=None, generate=None, is_valid=None):
+def play(prev, hand, discard, holding, valid=common.get_valid_plays, generate=common.generate_plays, is_valid=common.is_valid_play):
   if prev is None:
     plays = generate(hand)
   else:
@@ -31,22 +32,22 @@ def play(prev, hand, discard, holding, valid=None, generate=None, is_valid=None)
       cards = sorted(discard_summary[suit], key=common.card_value)
       ranks = [c[0] for c in cards]
       disp = ''.join( c if c in ranks else ' ' for c in common.RANKS)
-      print ("      {0}: {1}").format(suit, disp)
+      print ("      {0}: {1}".format(suit, disp))
 
-  print ("    Hand: {0}").format(sorted(hand, key=common.card_value))
+  print ("    Hand: {0}".format(sorted(hand, key=common.card_value)))
   if prev is not None:
-    print ("    Prev: {0}").format(sorted(prev, key=common.card_value))
-  print ("    [0] Pass")
+    print ("    Prev: {0}".format(sorted(prev, key=common.card_value)))
+  #print ("    [0] Pass")
   for i, play in enumerate(plays):
-    print ("    [{0}] {1}").format(i+1, play)
+    print ("    [{0}] {1}".format(i+1, play))
 
   try:
-    c = input("    CHOICE: ")
+    c = int(input("    CHOICE: "))
+    if c == 0:
+      return None
+    else:
+      return plays[c-1]
+    
   except KeyboardInterrupt:
     sys.exit(0)
 
-
-  if c == 0:
-    return None
-  else:
-    return plays[c-1]
