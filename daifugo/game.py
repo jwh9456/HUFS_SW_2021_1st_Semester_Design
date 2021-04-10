@@ -78,7 +78,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
     
     
     num_players = len(players)  # num_players = 4
-    print("에러 : 플레이어 수와 카드가 분배된 사람의 수가 다릅니다.")
+    #print("에러 : 플레이어 수와 카드가 분배된 사람의 수가 다릅니다.")
     assert len(hands) == num_players
     
     # len(hands) != num_players 이면 에러 발생
@@ -147,6 +147,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             print("  {0} ({2} cards) --> {1}".format(index, "pass", len(hands[index])))
           else:
             print("  {0} ({2} cards) --> {1}".format(index, play, len(hands[index])-len(play)))
+            #print("버리는 사람의 번호", (남은 카드 수) --> [버리는 카드])
 
         # need to check a play is a valid play
         if play and frozenset(play) not in map(frozenset,common.generate_plays(hand)):
@@ -185,7 +186,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         print("해당 카드를 버립니다.")
         print(discard[-1])
         
-        if paly is not None and len(play) >= 4:
+        if play is not None and len(play) >= 4:
             if common.REV:
                 common.REV = False
             else:
@@ -199,8 +200,11 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             prev = play # prev = 전에 버린 카드
             pass_count = 0 # pass_count 리셋
             last_player = index # 낸 사람이 마지막 사람이 됨.
-            
-        hachikire = hachikire(play)
+
+        
+        hachikire = False
+        if play is not None and play[-1] in ['8C','8S','8D','8H']:
+            hachikire = ishachikire(play)
 
         # Assess end of round
         if len(hands[index]) == 0:
@@ -277,3 +281,5 @@ def play_game(players, invalid_action='raise', initial_deal=None):  # invalid_ac
         lp_hist.append(lp)
     return lp_hist, discard, hands_hist
 
+players = ('A','B','C','D')
+play_game(players)
