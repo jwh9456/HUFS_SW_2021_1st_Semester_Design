@@ -1,7 +1,6 @@
 """
 Interactive player.
 """
-import common as common
 import sys
 from collections import defaultdict
 import common
