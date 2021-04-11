@@ -11,6 +11,7 @@ DEBUG = True
 import interactive
 import html
   # 같은 폴더에 있는 파일
+DEBUG = True 
 
 def get_deck(shuffle=False):
     suits = 'CSDH'
@@ -48,13 +49,18 @@ def deal(players=4):  # 카드 배분하기
 def ishachikire(play):  #하치키레 구현
     roundOver = False
 
-    for i in range(len(play)):
-        if common.card_value(play[i]) == 5: #기본 상태에서 8의 value는 5
-            roundOver = True
-            return roundOver
+    if common.REV == True: # 혁명 상태에서 8의 value는 7
+        for i in range(len(play)):
+            if common.card_value(play[i]) == 7:
+                roundOver = True
+                return roundOver
+    elif common.REV == False:  # 기본 상태에서 8의 value는 5
+        for i in range(len(play)):
+            if common.card_value(play[i]) == 5:
+                roundOver = True
+                return roundOver
 
     return roundOver
-
 
 ##class Exception(*args : object)##
 
@@ -79,6 +85,8 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
     
     num_players = len(players)  # num_players = 4
     #print("에러 : 플레이어 수와 카드가 분배된 사람의 수가 다릅니다.")
+    if len(hands) != num_players:
+        print("에러 : 플레이어 수와 카드가 분배된 사람의 수가 다릅니다.")
     assert len(hands) == num_players
     
     # len(hands) != num_players 이면 에러 발생
@@ -95,7 +103,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         # discard = [[1라운드에서 버려진 카드],[2라운드에서 버려진 카드]...]
         discard.append([])
 
-    indices = range(num_players)  #indices = range(0,4) ...?? 왜 있는거지?
+    #indices = range(num_players)  #indices = range(0,4) ...?? 왜 있는거지?
     pass_count = 0
     last_player=first_player   # 끝낸 사람이 처음으로 다시 시작.
     index = first_player  # index = 처음사람
@@ -200,10 +208,8 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             prev = play # prev = 전에 버린 카드
             pass_count = 0 # pass_count 리셋
             last_player = index # 낸 사람이 마지막 사람이 됨.
-
-        
-        hachikire = False
-        if play is not None and play[-1] in ['8C','8S','8D','8H']:
+            
+        if play is not None:
             hachikire = ishachikire(play)
 
         # Assess end of round
