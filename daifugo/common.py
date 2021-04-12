@@ -152,7 +152,7 @@ def generate_plays(hand):                   #내가 낼 수 있는 경우의 수
            suited[suit].append('BB')
        plays.extend(straights(suited[suit]))
     
-    plays = list(set(plays)) #중복 제거
+   #plays = list(set(plays)) 이걸 추가해서 중복제거를 하고 싶은데.. 이걸 넣으면 unhashable type: 'list' 이런거 떠서.. 문제
   
    return [list(p) for p in plays]
 
