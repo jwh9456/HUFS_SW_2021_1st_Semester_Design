@@ -4,10 +4,10 @@ Common methods used for daifugo playing.
 from collections import defaultdict
 from itertools import combinations,permutations
 
+RANKS = '34567890JQKA2B'
 ORG_RANKS = '34567890JQKA2B'
 REV_RANKS = '2AKQJ09876543B'
 
-RANKS = ORG_RANKS
 
 def cards_by_index(cardset, index):
     """
@@ -20,37 +20,22 @@ def cards_by_index(cardset, index):
     return retval
 
 def card_value(card):
-    if RANKS == REV_RANKS:
+    if REV:
         return REV_RANKS.index(card[0])
     return ORG_RANKS.index(card[0])
 
-def straights(cards):   #straights 판단해주는 함수
-    cards = sorted(cards, key=card_value)    #rank순으로 카드 정렬 ex) cards = [3H,4H,5H,2H]
+def straights(cards):
+    cards = sorted(cards, key=card_value)
     num_cards = len(cards)
     retval = []
-    retval_j = []       #조커가 있는 경우 straights의 경우의 수를 넣을 list
-    #for i in range(3,6): # straights of len 3 to 5
-    i=3
+    i = 3
     if num_cards < i:
-         # Can't have a straight of length i or more: not enough cards
-         return retval
-    if 'BB' not in cards:
-        for j in range(num_cards-i+1):
-             # We check that the difference in values is the same as the
-             # length of the straight. NB this only works if cards are unique
-             gap = card_value(cards[j+i-1]) - card_value(cards[j]) + 1
-             if gap == i:
-                 retval.append(cards[j:j+i])
-    elif 'BB' in cards: #조커가 있는 경우 straights판단
-        for i in range(3, num_cards+1, 1):
-        #연속된 세 자리 straights부터해서 카드의 갯수 만큼의 straights판단
-            per = permutations(cards, i)  #cards에서 나올 수 있는 모든 순열 경우의 수 계산
-            nof = list(per) #nof는 nP3부터 nPn까지의 순열 경우의수가 들어있는 list
-            for j in nof: #j는 각각의 순열 튜플
-                test = straights_joker(list(j))
-                if test :  #j가 straights라면, retval_j에 append
-                    retval_j.append(j)
-        return retval_j
+        return retval  # 손에 쥔 카드 장수가 모자라면 빈 스트레이트를 반환한다.
+    for j in range(num_cards - i + 1):
+        gap = card_value(cards[j + i - 1]) - card_value(cards[j]) + 1
+        # 계단은 3장으로 제한하고, 어차피 card_Value가 B를 가장 쎈걸로 반환하니까 딱히 조커를 추가할 필요는 없을듯?
+        if gap == i:
+            retval.append(cards[j:j + i])  # 3장짜리 가능한 카드 경우의수를 리턴한다
     return retval
 
 def straights_joker(cards):  #cards는 각각의 순열들
@@ -96,6 +81,51 @@ def straights_joker(cards):  #cards는 각각의 순열들
                return False
        return True
 
+def straightsJoker(cards):  # player가 조커를 가지고 있을 경우 straigth 가능한 수 알려주는 함수
+    cards = sorted(cards, key=card_value)  # 카드 value 순으로 오름차순 정렬
+    print(cards)
+    num_cards = len(cards)
+    retval = []
+
+    if num_cards < 3:
+        return retval
+
+    for i in range(num_cards - 2):
+        if card_value(cards[i + 2]) - card_value(cards[i]) + 1 == 3 and card_value(
+                cards[i + 2]) != 13:  # 조커 있지만 스트레이트인 경우
+            retval.append(cards[i:i + 3])
+        if card_value(cards[i + 1]) - card_value(cards[i]) + 1 == 3:  # 바로 옆이 2단계 위인 경우 조커 가운데로
+            straight = []
+            straight.append(cards[i])
+            straight.append(cards[-1])
+            straight.append(cards[i + 1])
+            retval.append(straight)
+        if card_value(cards[i + 1]) - card_value(cards[i]) + 1 == 2:  # 바로 옆이 한단계 위인 경우 조커가 양 옆에 올 수 있음
+            if card_value(cards[i]) == 0:
+                straight = []
+                straight.append(cards[i])
+                straight.append(cards[i + 1])
+                straight.append(cards[-1])
+                retval.append(straight)
+            elif card_value(cards[i + 1]) == 12:
+                straight = []
+                straight.append(cards[-1])
+                straight.append(cards[i])
+                straight.append(cards[i + 1])
+                retval.append(straight)
+            else:
+                straight = []
+                straight.append(cards[-1])
+                straight.append(cards[i])
+                straight.append(cards[i + 1])
+                retval.append(straight)
+                straight = []
+                straight.append(cards[-1])
+                straight.append(cards[i])
+                straight.append(cards[i + 1])
+                retval.append(straight)
+    return retval
+
 def generate_plays(hand):                   #내가 낼 수 있는 경우의 수를 plays에 넣어서 return
    """
    Generate all possible plays from a given hand.
@@ -120,93 +150,41 @@ def generate_plays(hand):                   #내가 낼 수 있는 경우의 수
        plays.extend(straights(suited[suit]))
        if 'BB' in hand:
            suited[suit].append('BB')
-
        plays.extend(straights(suited[suit]))
+    
+    plays = list(set(plays)) #중복 제거
+  
    return [list(p) for p in plays]
 
-def straightsJoker(cards): #player가 조커를 가지고 있을 경우 straigth 가능한 수 알려주는 함수
-
-    cards = sorted(cards, key=card_value) #카드 value 순으로 오름차순 정렬
-    print(cards)
-    num_cards = len(cards)
-    retval = []
-
-    #straight를 3장만 낼 수 있다고 정했기 때문에 3으로 고정이라 첫 for문 삭제
-
-    if num_cards < 3:
-        return retval
-
-    for i in range(num_cards-2):
-        if card_value(cards[i+2]) - card_value(cards[i]) + 1 == 3 and card_value(cards[i+2]) != 13: #조커 있지만 스트레이트인 경우
-            retval.append(cards[i:i+3])
-        if card_value(cards[i+1]) - card_value(cards[i]) + 1 == 3: #바로 옆이 2단계 위인 경우 조커 가운데로
-            straight = []
-            straight.append(cards[i])
-            straight.append(cards[-1])
-            straight.append(cards[i+1])
-            retval.append(straight)
-        if card_value(cards[i+1]) - card_value(cards[i]) + 1 == 2: #바로 옆이 한단계 위인 경우 조커가 양 옆에 올 수 있음
-            if card_value(cards[i]) == 0:
-                straight = []
-                straight.append(cards[i])
-                straight.append(cards[i + 1])
-                straight.append(cards[-1])
-                retval.append(straight)
-            elif card_value(cards[i+1]) == 12:
-                straight = []
-                straight.append(cards[-1])
-                straight.append(cards[i])
-                straight.append(cards[i + 1])
-                retval.append(straight)
-            else:
-                straight = []
-                straight.append(cards[-1])
-                straight.append(cards[i])
-                straight.append(cards[i + 1])
-                retval.append(straight)
-                straight = []
-                straight.append(cards[-1])
-                straight.append(cards[i])
-                straight.append(cards[i + 1])
-                retval.append(straight)
-
-    return retval
-
 def is_valid_play(prev, play, debug=False):
-    """
-    Determine if a play is valid given a previous play
-    """
     if play is None:
-        # it is always ok to pass
         return True
-    if card_value(prev[0]) != card_value(prev[-1]):
-        # Previous play is a straight
-        s = straights(play)
+
+    if 'BB' in prev:
+        if (card_value(prev[0]) != card_value(prev[1])):
+            idx = card_value(prev[-2])
+            prev[-1] = list(RANKS[idx + 1])
+        else:
+            idx = card_value(prev[0])
+            prev[-1] = list(RANKS[idx])
+
+    if len(prev) == 3 and card_value(prev[0]) == card_value(prev[1]): #prev가 straight인 경우
+        if 'BB' in play:
+            s = straightsJoker(play)
+        else:
+            s = straights(play)
         if len(s) == 0:
-            # Proposed play is not a straight
-            if debug: print ("INVALID: {0} is not a straight").format(play)
             return False
-        if card_value(max(prev, key=card_value)) >= card_value(max(play, key=card_value)):
-            # Proposed play does not have a higher max card
-            if debug: 
-                print ("INVALID: {0} does not have higher max card").format(play)
-                print ("prev:{0} play:{1}").format(max(prev, key=card_value), max(play, key=card_value))
+        if card_value(max(prev, key=card_value)) > card_value(max(s, key=card_value)):
             return False
         else:
             return True
     else:
-        # Previous play is a ORG_RANKSet
-        if len(play) != len(prev):
-            # Wrong number of cards
-            if debug: print ("INVALID: {0} has wrong number of cards").format(play)
+        if len(play) < len(prev):
             return False
         elif len(set(p[0] for p in play)) != 1:
-            # Proposed play has cards of mixed rank
-            if debug: print ("INVALID: {0} of mixed rank").format(play)
             return False
         elif card_value(play[0]) <= card_value(prev[0]):
-            # Proposed play is not worth more than prev
-            if debug: print ("INVALID: {0} not worth more").format(play)
             return False
         else:
             return True
