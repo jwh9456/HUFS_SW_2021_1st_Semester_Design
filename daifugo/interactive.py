@@ -49,5 +49,6 @@ def play(prev, hand, discard, holding, valid=common.get_valid_plays, generate=co
         return plays[c-1]
         
     except:
+      print("    올바른 번호를 입력해 주세요")
       continue
     
