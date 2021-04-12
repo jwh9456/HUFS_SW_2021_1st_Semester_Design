@@ -49,12 +49,12 @@ def deal(players=4):  # 카드 배분하기
 def ishachikire(play):  #하치키레 구현
     roundOver = False
 
-    if common.REV == True: # 혁명 상태에서 8의 value는 7
+    if common.RANKS == common.REV_RANKS: # 혁명 상태에서 8의 value는 7
         for i in range(len(play)):
             if common.card_value(play[i]) == 7:
                 roundOver = True
                 return roundOver
-    elif common.REV == False:  # 기본 상태에서 8의 value는 5
+    elif common.REV == common.ORG_RANKS:  # 기본 상태에서 8의 value는 5
         for i in range(len(play)):
             if common.card_value(play[i]) == 5:
                 roundOver = True
