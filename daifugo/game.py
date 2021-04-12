@@ -129,12 +129,6 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         print("해당 카드를 선택했습니다.")
         print(play)
 
-        if play is not None and len(play) == 4:
-            if common.RANKS == common.ORG_RANKS:
-                common.RANKS = common.REV_RANKS
-            else:
-                common.RANKS = common.ORG_RANKS
-
 
         """
 
@@ -199,11 +193,11 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         print("해당 카드를 버립니다.")
         print(discard[-1])
         
-        if play is not None and len(play) >= 4:
-            if common.REV:
-                common.REV = False
+        if play is not None and len(play) == 4:
+            if common.RANKS == common.ORG_RANKS:
+                common.RANKS = common.REV_RANKS
             else:
-                common.REV = True
+                common.RANKS = common.ORG_RANKS
 
         if play is None:  #선택한 게 없으면
             pass_count += 1  # pass_count 한 번 추가
