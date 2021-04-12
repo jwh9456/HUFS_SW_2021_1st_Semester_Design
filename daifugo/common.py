@@ -20,7 +20,7 @@ def cards_by_index(cardset, index):
     return retval
 
 def card_value(card):
-    if REV:
+    if RANKS == REV_RANKS:
         return REV_RANKS.index(card[0])
     return ORG_RANKS.index(card[0])
 
