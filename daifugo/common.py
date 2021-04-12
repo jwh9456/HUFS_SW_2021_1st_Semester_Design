@@ -6,9 +6,10 @@ from itertools import combinations,permutations
 
 REV = False
 
-RANKS = '34567890JQKA2B'
 ORG_RANKS = '34567890JQKA2B'
 REV_RANKS = '2AKQJ09876543B'
+
+RANKS = ORG_RANKS
 
 def cards_by_index(cardset, index):
     """
