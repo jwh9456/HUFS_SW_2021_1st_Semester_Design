@@ -11,8 +11,14 @@ DEBUG = True
 import interactive
 import html
   # 같은 폴더에 있는 파일
-DEBUG = True 
+DEBUG = True
 
+# 대부호 > 부자 > 빈민 > 평민
+class participation:
+    def __init__(self):
+        self.score = 0
+        self.rank = "평민"
+        
 def get_deck(shuffle=False):
     suits = 'CSDH'
     ranks = '34567890JQKA2'
@@ -234,12 +240,15 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
               return hands, last_player, False, discard
         
         elif common.REV == False and prev is not None and prev[-1][0] == '2':
-            if 'BB' in hands[(index + 1) % num_players]: # 마지막으로 낸 카드가 2인데, 다음 차례가 'BB'가지고 있으면 계속 진행
+            if len(prev) >= 2:
+              if DEBUG: print("ROUND OVER: 2 played - LP {0}".format(last_player))
+              return hands, last_player, False, discard
+            elif 'BB' in hands[(index + 1) % num_players]: # 마지막으로 낸 카드가 2인데, 다음 차례가 'BB'가지고 있으면 계속 진행
               index = (index + 1) % num_players
               print("{0} 번 플레이어로 차례가 넘어갑니다.\n".format(index))
               continue
-         else: # 마지막으로 낸 카드가 2이고, 다음 차례가 'BB'가 없으면
-            if DEBUG: print("ROUND OVER: 2 played - LP {0}".format(last_player))
+            else: # 마지막으로 낸 카드가 2이고, 다음 차례가 'BB'가 없으면
+              if DEBUG: print("ROUND OVER: 2 played - LP {0}".format(last_player))
               return hands, last_player, False, discard
           
         elif prev is not None and len(prev) == 1 and prev[-1][0] == 'B':
