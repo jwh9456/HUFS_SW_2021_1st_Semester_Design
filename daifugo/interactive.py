@@ -40,13 +40,14 @@ def play(prev, hand, discard, holding, valid=common.get_valid_plays, generate=co
   for i, play in enumerate(plays):
     print ("    [{0}] {1}".format(i+1, play))
 
-  try:
-    c = int(input("    CHOICE: "))
-    if c == 0:
-      return None
-    else:
-      return plays[c-1]
+  while True:
+    try:
+      c = int(input("    CHOICE: "))
+      if c == 0:
+        return None
+      else:
+        return plays[c-1]
+        
+    except:
+      continue
     
-  except KeyboardInterrupt:
-    sys.exit(0)
-
