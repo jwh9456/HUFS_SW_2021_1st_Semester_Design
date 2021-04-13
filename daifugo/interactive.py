@@ -45,6 +45,8 @@ def play(prev, hand, discard, holding, valid=common.get_valid_plays, generate=co
       c = int(input("    CHOICE: "))
       if c == 0:
         return None
+      elif str(c) == 'exit':
+        break
       else:
         return plays[c-1]
         
