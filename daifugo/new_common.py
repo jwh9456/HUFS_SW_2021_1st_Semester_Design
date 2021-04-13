@@ -208,8 +208,16 @@ def is_valid_play(prev, play, debug=False):
             return False
         elif card_value(play[0]) <= card_value(prev[0]):
             # Proposed play is not worth more than prev
+            if 'BB' in play:
+                if card_value(play[0]) <= card_value(prev[0]):
+                    if debug: print("INVALID: {0} not worth more".format(play))
+                    return False
+                else:
+                    return True
+                
             if debug: print("INVALID: {0} not worth more".format(play))
             return False
+        
         else:
             return True
 
