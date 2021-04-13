@@ -4,6 +4,8 @@ Common methods used for daifugo playing.
 from collections import defaultdict
 from itertools import combinations,permutations
 
+REV = False
+
 RANKS = '34567890JQKA2B'
 ORG_RANKS = '34567890JQKA2B'
 REV_RANKS = '2AKQJ09876543B'
