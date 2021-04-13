@@ -3,9 +3,7 @@ Common methods used for daifugo playing.
 """
 from collections import defaultdict
 from itertools import combinations,permutations
-
-REV = False
-
+REV= False
 RANKS = '34567890JQKA2B'
 ORG_RANKS = '34567890JQKA2B'
 REV_RANKS = '2AKQJ09876543B'
@@ -30,6 +28,7 @@ def straights(cards):
     cards = sorted(cards, key=card_value)
     num_cards = len(cards)
     retval = []
+    retval_j = []
     i = 3
     if num_cards < i:
         return retval  # 손에 쥔 카드 장수가 모자라면 빈 스트레이트를 반환한다.
@@ -38,6 +37,23 @@ def straights(cards):
         # 계단은 3장으로 제한하고, 어차피 card_Value가 B를 가장 쎈걸로 반환하니까 딱히 조커를 추가할 필요는 없을듯?
         if gap == i:
             retval.append(cards[j:j + i])  # 3장짜리 가능한 카드 경우의수를 리턴한다
+    if 'BB' in cards:                         #조커가 있는 경우 straights판단
+                                              #연속된 세 자리 straights부터해서 카드의 갯수 만큼의 straights판단
+        per = permutations(cards, 3)          #cards에서 나올 수 있는 모든 순열 경우의 수 계산
+        nof = list(per)                       #nof는 nP3부터 nPn까지의 순열 경우의수가 들어있는 list
+
+
+        for j in nof:             #j는 각각의 순열 튜플
+            test = straights_joker(list(j))
+            if test:                #j가 straights라면, retval_j에 append
+                retval_j.append(j)
+
+
+
+
+
+        return retval_j
+
     return retval
 
 def straights_joker(cards):  #cards는 각각의 순열들
@@ -153,39 +169,62 @@ def generate_plays(hand):                   #내가 낼 수 있는 경우의 수
        if 'BB' in hand:
            suited[suit].append('BB')
        plays.extend(straights(suited[suit]))
+
    #plays = list(set(plays)) 이걸 추가해서 중복제거를 하고 싶은데.. 이걸 넣으면 unhashable type: 'list' 이런거 떠서.. 문제
+
    return [list(p) for p in plays]
 
 def is_valid_play(prev, play, debug=False):
+    """
+    Determine if a play is valid given a previous play
+    """
     if play is None:
+        # it is always ok to pass
         return True
-
-    if 'BB' in prev:
-        if (card_value(prev[0]) != card_value(prev[1])):
-            idx = card_value(prev[-2])
-            prev[-1] = list(RANKS[idx + 1])
-        else:
-            idx = card_value(prev[0])
-            prev[-1] = list(RANKS[idx])
-
-    if (len(prev) == 3 and (card_value(prev[0]) == card_value(prev[1]) ==card_value(prev[2]) ) ): #prev가 straight인 경우
-        if 'BB' in play:
-            s = straightsJoker(play)
-        else:
-            s = straights(play)
+    if card_value(prev[0]) != card_value(prev[-1]):
+        # Previous play is a straight
+        s = straights(play)
         if len(s) == 0:
+            # Proposed play is not a straight
+            if debug: print("INVALID: {0} is not a straight".format(play))
             return False
-        if card_value(max(prev, key=card_value)) > card_value(max(s, key=card_value)):
+        if card_value(max(prev, key=card_value)) >= card_value(max(play, key=card_value)):
+            # Proposed play does not have a higher max card
+            if debug:
+                print("INVALID: {0} does not have higher max card".format(play))
+                print("prev:{0} play:{1}".format(max(prev, key=card_value), max(play, key=card_value)))
             return False
         else:
             return True
     else:
-        if len(play) < len(prev):
+        # Previous play is a rankset
+        if len(play) != len(prev):
+            # Wrong number of cards
+            if debug: print("INVALID: {0} has wrong number of cards".format(play))
             return False
+            
         elif len(set(p[0] for p in play)) != 1:
-            return False
+            # Proposed play has cards of mixed rank
+            if 'BB' in play:
+                if card_value(play[0]) <= card_value(prev[0]):
+                    if debug: print("INVALID: {0} not worth more".format(play))
+                    return False
+                else:
+                    return True
+
         elif card_value(play[0]) <= card_value(prev[0]):
+            # Proposed play is not worth more than prev
+            if debug: print("INVALID: {0} not worth more".format(play))
             return False
+
+        elif len(set(p[0] for p in play)) != 1:
+            # Proposed play has cards of mixed rank
+            if 'BB' in play:
+                if card_value(play[0]) <= card_value(prev[0]):
+                    if debug: print("INVALID: {0} not worth more".format(play))
+                    return False
+                else:
+                    return True
         else:
             return True
 

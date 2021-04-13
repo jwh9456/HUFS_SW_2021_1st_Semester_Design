@@ -20,23 +20,22 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 deck = game.get_deck()
 for card in deck:
     card_image = pygame.image.load(str(imgpath)+'/'+card+'.png')
+    card_image = pygame.transform.scale(card_image,(100,130))
 clock = pygame.time.Clock()
 
-#imgpath=p('/assets/cards')
-
 back_image = pygame.image.load(p.cwd()/'daifugo'/'assets'/'cards'/'back.png').convert()
-
+back_image = pygame.transform.scale(back_image,(100,155))
 while True:
 
-    key_event = pygame.key.get_pressed()
-    if key_event[pygame.K_LEFT]:
-        cursor -= 1
+    # key_event = pygame.key.get_pressed()
+    # if key_event[pygame.K_LEFT]:
+    #     cursor -= 1
 
-    if key_event[pygame.K_RIGHT]:
-        cursor += 1
+    # if key_event[pygame.K_RIGHT]:
+    #     cursor += 1
 
-    if key_event[pygame.K_ESCAPE]:
-        pygame.quit()
+    # if key_event[pygame.K_ESCAPE]:
+    #     pygame.quit()
 
     screen.fill(background)
     screen.blit(back_image,(200,200))

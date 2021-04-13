@@ -1,7 +1,8 @@
 '''
 Daifugo player backend.
 '''
-import common as common
+#import common as common
+import new_common as common
 import random
 import copy
 from itertools import product, cycle
@@ -281,5 +282,5 @@ def play_game(players, invalid_action='raise', initial_deal=None):  # invalid_ac
         lp_hist.append(lp)
     return lp_hist, discard, hands_hist
 
-# players = ('A','B','C','D')
-# play_game(players)
+players = ('A','B','C','D')
+play_game(players)
