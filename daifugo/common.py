@@ -4,6 +4,8 @@ Common methods used for daifugo playing.
 from collections import defaultdict
 from itertools import combinations,permutations
 
+REV = False
+
 RANKS = '34567890JQKA2B'
 ORG_RANKS = '34567890JQKA2B'
 REV_RANKS = '2AKQJ09876543B'
@@ -147,7 +149,7 @@ def generate_plays(hand):                   #내가 낼 수 있는 경우의 수
    # Generate straights
    suited = cards_by_index(hand,1)
    for suit in suited:
-       plays.extend(straights(suited[suit]))
+       #plays.extend(straights(suited[suit]))
        if 'BB' in hand:
            suited[suit].append('BB')
        plays.extend(straights(suited[suit]))
