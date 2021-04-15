@@ -108,40 +108,11 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         
         print("각자 가지고 있는 카드의 개수")
         print(holding)
-
-        args = [copy.deepcopy(prev), list(hand), copy.deepcopy(discard), holding]
-        #arge =[[이전에 낸 카드],[손에 들고 있는 카드],[버린 카드],(각자 가지고 있는 카드의 개수)] 
-
-        # ..???
-        kwargs = dict(valid=common.get_valid_plays, generate=common.generate_plays, 
-            is_valid=common.is_valid_play)
-        call_str = "play({args[0]},{args[1]},{args[2]},{args[3]})".format(args=args)
-
-        try:
-            # TODO: Suppress stdout
-            # TODO: impose timelimit
-            play = interactive.play(prev, hand, discard, holding)
-            print("해당 카드를 선택했습니다.")
-            print(play)
-
-               
-        except Exception as e:
-            if DEBUG: print("  {0} failed with exception: '{1}'".format(index, e))
-            if invalid_action == 'pass':
-                play = None
-            elif invalid_action == 'raise':
-                raise InvalidAction("player {0} raised {1}: '{2}'".format(index, html.escape(e.__class__.__name__), e), call_str)
-
-                '''
-                 HTML 문법으로 이미 사용되고있는 문자열을 온전하게 표시하기 위해서는
-                 HTML escape 와 unescape 에 대한 개념을 알아야 한다.
-                 
-                 escape : 데이터중 HTML형식을 가질만한 문자열을 브라우저끼리 약속된 형태의 
-                          안전한 예약문자열로 변환하는 것.
-
-
-                '''
-
+        
+        play = interactive.play(prev, hand, discard, holding)
+        print("해당 카드를 선택했습니다.")
+        print(play)
+        
         if DEBUG: 
           if play is None:
             print("  {0} ({2} cards) --> {1}".format(index, "pass", len(hands[index])))
@@ -281,5 +252,5 @@ def play_game(players, invalid_action='raise', initial_deal=None):  # invalid_ac
         lp_hist.append(lp)
     return lp_hist, discard, hands_hist
 
-# players = ('A','B','C','D')
-# play_game(players)
+players = ('A','B','C','D')
+play_game(players)
