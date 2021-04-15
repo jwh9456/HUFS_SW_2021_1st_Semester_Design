@@ -16,8 +16,6 @@ def play(prev, hand, discard, holding, valid=common.get_valid_plays, generate=co
     return None
   
   new_plays = []
-  print('plays', plays)
-  print('prev', prev)
   if prev:
     for elem in plays:
       if len(elem) == len(prev):
