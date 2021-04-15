@@ -14,9 +14,19 @@ def play(prev, hand, discard, holding, valid=common.get_valid_plays, generate=co
   # Just pass straight away if we dont actually have a choice
   if not plays:
     return None
+  
+  new_plays = []
+  print('plays', plays)
+  print('prev', prev)
+  if prev:
+    for elem in plays:
+      if len(elem) == len(prev):
+        new_plays.append(elem)
+  else:
+    new_plays = plays
 
-  plays.sort(key=lambda p: (len(p), max(map(common.card_value,p))))
-  print ("PLAYS",plays)
+  new_plays.sort(key=lambda p: (len(p), max(map(common.card_value,p))))
+  print ("PLAYS",new_plays)
 
   discard_summary = defaultdict(list)
   for round in discard:
@@ -37,7 +47,7 @@ def play(prev, hand, discard, holding, valid=common.get_valid_plays, generate=co
   if prev is not None:
     print ("    Prev: {0}".format(sorted(prev, key=common.card_value)))
   #print ("    [0] Pass")
-  for i, play in enumerate(plays):
+  for i, play in enumerate(new_plays):
     print ("    [{0}] {1}".format(i+1, play))
 
   while True:
@@ -48,7 +58,7 @@ def play(prev, hand, discard, holding, valid=common.get_valid_plays, generate=co
       elif str(c) == 'exit':
         break
       else:
-        return plays[c-1]
+        return new_plays[c-1]
         
     except:
       print("    올바른 번호를 입력해 주세요")
