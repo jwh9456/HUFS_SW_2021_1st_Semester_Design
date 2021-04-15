@@ -129,34 +129,29 @@ def straightsJoker(cards):  # player가 조커를 가지고 있을 경우 straig
     return retval
 
 def generate_plays(hand):                   #내가 낼 수 있는 경우의 수를 plays에 넣어서 return
-   """
-   Generate all possible plays from a given hand.
-   """
-   ranked = cards_by_index(hand,0)         #ranked는 리스트형 dic
-   plays = []
+    ranked = cards_by_index(hand,0)         #ranked는 리스트형 dic
+    plays = []
    # Generate rank combinations
-   for rank in ranked:                     #ranked는 key만 돌음
-       cards = ranked[rank]                #cards는  같은 숫자 다른 모양들의 각각의 리스트 ex) [3C,3H],[5C,5H]
+    for rank in ranked:                     #ranked는 key만 돌음
+        cards = ranked[rank]                #cards는  같은 숫자 다른 모양들의 각각의 리스트 ex) [3C,3H],[5C,5H]
 
-       if 'BB' in hand and rank !='B' :          #가지고 있는 패에 조커가 있는 지 확인 ['BB','BB']제거
-           cards.append('BB')     #조커가 있다면 cards리스트에 각각 append해주기 ex) [3C,3H,BB]
+        if 'BB' in hand and rank !='B' :          #가지고 있는 패에 조커가 있는 지 확인 ['BB','BB']제거
+            cards.append('BB')     #조커가 있다면 cards리스트에 각각 append해주기 ex) [3C,3H,BB]
+        for n in range(1,5):
+            plays.extend(combinations(cards, n))
 
-       for n in range(1,5):
-           plays.extend(combinations(cards, n))
-
-   plays = list(set(plays))  #combinations함수에서 n=1일때 발생하는 하나 짜리 조커 중복 제거 ex)[B],[B]
+    plays = list(set(plays))  #combinations함수에서 n=1일때 발생하는 하나 짜리 조커 중복 제거 ex)[B],[B]
 
    # Generate straights
-   suited = cards_by_index(hand,1)
-   for suit in suited:
+    suited = cards_by_index(hand,1)
+    for suit in suited:
        #plays.extend(straights(suited[suit]))
-       if 'BB' in hand:
-           suited[suit].append('BB')
-       plays.extend(straights(suited[suit]))
+        if 'BB' in hand:
+            suited[suit].append('BB')
+        plays.extend(straights(suited[suit]))
+
     
-   #plays = list(set(plays)) 이걸 추가해서 중복제거를 하고 싶은데.. 이걸 넣으면 unhashable type: 'list' 이런거 떠서.. 문제
-  
-   return [list(p) for p in plays]
+    return [list(p) for p in plays]
 
 def is_valid_play(prev, play, debug=False):
     if play is None:
