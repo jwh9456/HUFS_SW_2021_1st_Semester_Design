@@ -58,7 +58,7 @@ def straights(cards):
 
 def straights_joker(cards):  #cards는 각각의 순열들
    i = len(cards)
-   lrank=list(ORG_RANKS)
+   lrank=list(RANKS)
 
    if 'BB' in cards:  #조커가 있을 경우
        j = 0
@@ -71,7 +71,7 @@ def straights_joker(cards):  #cards는 각각의 순열들
            elif n2 == 'BB':                         #n2가 조커인 경우
                temp = card_value(n1)
 
-               if len(ORG_RANKS)-2 != temp:             #조커 앞의 카드가 2(가장강한카드)가 아니라면, 조커자리에 n1보다
+               if len(RANKS)-2 != temp:             #조커 앞의 카드가 2(가장강한카드)가 아니라면, 조커자리에 n1보다
                    cards[j+1] = lrank[temp+1]       #한 계단 높은 카드를 삽입하고, 그 뒤의 카드들의 rank 순차적 판단
                    j+=1
                    continue
@@ -181,3 +181,5 @@ def get_valid_plays(prev, hand, generate=generate_plays, is_valid=is_valid_play)
     Produce a list of valid plays given a previous play and a current hand.
     """
     return [ p for p in generate(hand) if is_valid(prev, p) ]
+
+
