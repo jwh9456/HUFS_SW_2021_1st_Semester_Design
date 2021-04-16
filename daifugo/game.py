@@ -45,18 +45,12 @@ def deal(players=4):  # 카드 배분하기
         '''
     return hands
 
-def ishachikire(play):  #하치키레 구현
+def ishachikire(play):  # 하치키레 구현
     roundOver = False
-
     for i in range(len(play)):
-        if common.card_value(play[i]) == 5: #기본 상태에서 8의 value는 5
+        if play[i][0] == '8':
             roundOver = True
-            return roundOver
-
     return roundOver
-
-
-##class Exception(*args : object)##
 
 class InvalidAction(Exception): # ?? 상속..?
     def __init__(self, reason, call):
@@ -80,7 +74,6 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
     num_players = len(players)  # num_players = 4
     #print("에러 : 플레이어 수와 카드가 분배된 사람의 수가 다릅니다.")
     assert len(hands) == num_players
-    
     # len(hands) != num_players 이면 에러 발생
     
     prev = None #last hand played
@@ -95,7 +88,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         # discard = [[1라운드에서 버려진 카드],[2라운드에서 버려진 카드]...]
         discard.append([])
 
-    indices = range(num_players)  #indices = range(0,4) ...?? 왜 있는거지?
+    #indices = range(num_players) 왜 있는거지?
     pass_count = 0
     last_player=first_player   # 끝낸 사람이 처음으로 다시 시작.
     index = first_player  # index = 처음사람
@@ -173,8 +166,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             last_player = index # 낸 사람이 마지막 사람이 됨.
 
         
-        hachikire = False
-        if play is not None and play[-1] in ['8C','8S','8D','8H']:
+        if play is not None:
             hachikire = ishachikire(play)
 
         # Assess end of round
@@ -183,18 +175,42 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             if DEBUG: print("ROUND OVER: Player {0} wins".format(index))
             # 이김
             return hands, last_player, True, discard
+          
         elif pass_count == num_players:
             # 모두 다 패스한다면
             if DEBUG: print("ROUND OVER: All passed - LP {0}".format(last_player))
             # 마지막으로 낸 사람이 이김
             return hands, last_player, False, discard
-        elif prev is not None and prev[-1][0] == '2':
-            # 마지막으로 낸 카드가 2라면
-            if DEBUG: print("ROUND OVER: 2 played - LP {0}".format(last_player))
+          
+        elif common.REV == True and prev is not None and prev[-1][0] == '3':
+            if 'BB' in hands[(index + 1) % num_players]:  # 혁명상태에서 마지막으로 낸 카드가 3인데, 다음 차례가 'BB'가지고 있으면 계속 진행
+                index = (index + 1) % num_players
+                print("{0} 번 플레이어로 차례가 넘어갑니다.\n".format(index))
+                continue
+            else:  # 마지막으로 낸 카드가 2이고, 다음 차례가 'BB'가 없으면
+                if DEBUG: print("ROUND OVER: 3 played in REV - LP {0}".format(last_player))
+                return hands, last_player, False, discard
+
+        elif common.REV == False and prev is not None and prev[-1][0] == '2':
+            if len(prev) >= 2: #2를 냈는데, 2장 이상인 경우
+                if DEBUG: print("ROUND OVER: 2 played - LP {0}".format(last_player))
+                return hands, last_player, False, discard
+            elif 'BB' in hands[(index + 1) % num_players]: # 마지막으로 낸 카드가 2인데, 다음 차례가 'BB'가지고 있으면 계속 진행
+                index = (index + 1) % num_players
+                print("{0} 번 플레이어로 차례가 넘어갑니다.\n".format(index))
+                continue
+            else: # 마지막으로 낸 카드가 2이고, 다음 차례가 'BB'가 없으면
+                if DEBUG: print("ROUND OVER: 2 played - LP {0}".format(last_player))
+                return hands, last_player, False, discard
+
+        elif prev is not None and len(prev) == 1 and prev[-1][0] == 'B':
+            # 단독으로 'BB' 만 냈을 경우
+            if DEBUG: print("ROUND OVER: B played - LP {0}".format(last_player))
             # 마지막 사람이 이김
             return hands, last_player, False, discard
+
         elif play is not None and hachikire:
-            if DEBUG:
+             if DEBUG:
                 print("ROUND OVER: hachikire - LP {0}".format(last_player))
                 return hands, last_player, False, discard
 
@@ -213,6 +229,7 @@ def play_game(players, invalid_action='raise', initial_deal=None):  # invalid_ac
 
     lp_hist = []  #last player history
     hands_hist = []
+    
     if initial_deal is None:
         print("패를 나누겠습니다.\n")
         initial_deal = deal()
