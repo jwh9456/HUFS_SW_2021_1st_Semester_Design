@@ -45,12 +45,25 @@ def straights(cards):
 
         for j in nof:             #j는 각각의 순열 튜플
             test = straights_joker(list(j))
-            if test:                #j가 straights라면, retval_j에 append
+            if test:               #j가 straights라면, retval_j에 append
+                j = list(j)
+                for k in range(2):
+                    if REV:
+                        if card_value(j[k]) + 1 != (card_value(j[k + 1])):
+                            if j[k] == 'BB':
+                                j[k] = str(REV_RANKS[card_value(j[k+1])-1]) +'B'
+                            else:
+                                j[k+1] = str(REV_RANKS[card_value(j[k])+1]) + 'B'
+
+                    else:
+                        if card_value(j[k]) + 1 != (card_value(j[k + 1])):
+                            if j[k] == 'BB':
+                                j[k] = str(ORG_RANKS[card_value(j[k+1])-1]) +'B'
+                            else:
+                                j[k+1] = str(ORG_RANKS[card_value(j[k])+1]) + 'B'
+
+                j = tuple(j)
                 retval_j.append(j)
-
-
-
-
 
         return retval_j
 
