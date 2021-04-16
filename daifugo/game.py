@@ -46,11 +46,20 @@ def deal(players=4):  # 카드 배분하기
     return hands
 
 def ishachikire(play):  # 하치키레 구현
-    roundOver = False
-    for i in range(len(play)):
-        if play[i][0] == '8':
-            roundOver = True
-    return roundOver
+    hachikire = True
+
+    if 'BB' in play:
+        for i in range(len(play)):
+            if play[i][0] != '8' and play[i][0] != 'B':
+                hachikire = False
+                break
+    else:
+        for i in range(len(play)):
+            if play[i][0] != '8':
+                hachikire = False
+                break
+
+    return hachikire
 
 class InvalidAction(Exception): # ?? 상속..?
     def __init__(self, reason, call):
