@@ -3,7 +3,7 @@ Interactive player.
 """
 import sys
 from collections import defaultdict
-import common
+import new_common as common
 
 def play(prev, hand, discard, holding, valid=common.get_valid_plays, generate=common.generate_plays, is_valid=common.is_valid_play):
   if prev is None:
