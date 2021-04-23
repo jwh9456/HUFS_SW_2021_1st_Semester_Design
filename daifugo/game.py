@@ -177,7 +177,8 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         else:       # 선택한 게 있으면
             for i in range(len(play)):
               if play[i][1] == 'B':
-                play[i] = 'BB'
+                hand -= set(['BB'])
+                break
             hand -= set(play) # 카드 버림
             prev = play # prev = 전에 버린 카드
             pass_count = 0 # pass_count 리셋
