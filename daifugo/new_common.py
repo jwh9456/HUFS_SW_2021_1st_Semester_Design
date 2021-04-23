@@ -123,7 +123,8 @@ def generate_plays(hand):                   #내가 낼 수 있는 경우의 수
        cards = ranked[rank]                #cards는  같은 숫자 다른 모양들의 각각의 리스트 ex) [3C,3H],[5C,5H]
 
        if 'BB' in hand and rank !='B' :          #가지고 있는 패에 조커가 있는 지 확인 ['BB','BB']제거
-           cards.append('BB')     #조커가 있다면 cards리스트에 각각 append해주기 ex) [3C,3H,BB]
+           make_b = rank+'B'
+           cards.append(make_b)     #조커가 있다면 cards리스트에 각각 append해주기 ex) [3C,3H,BB]
 
        for n in range(1,5):
            plays.extend(combinations(cards, n))
