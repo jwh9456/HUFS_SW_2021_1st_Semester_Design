@@ -156,7 +156,7 @@ def is_valid_play(prev, play, debug=False):
             # Proposed play is not a straight
             if debug: print("INVALID: {0} is not a straight".format(play))
             return False
-        if card_value(max(prev, key=card_value)) >= card_value(max(play, key=card_value)):
+        if card_value(max(prev, key=card_value)) >= card_value(min(play, key=card_value)):
             # Proposed play does not have a higher max card
             if debug:
                 print("INVALID: {0} does not have higher max card".format(play))
