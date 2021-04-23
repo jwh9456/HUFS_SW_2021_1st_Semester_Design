@@ -123,13 +123,21 @@ def generate_plays(hand):                   #내가 낼 수 있는 경우의 수
        cards = ranked[rank]                #cards는  같은 숫자 다른 모양들의 각각의 리스트 ex) [3C,3H],[5C,5H]
 
        if 'BB' in hand and rank !='B' :          #가지고 있는 패에 조커가 있는 지 확인 ['BB','BB']제거
-           make_b = rank+'B'
-           cards.append(make_b)     #조커가 있다면 cards리스트에 각각 append해주기 ex) [3C,3H,BB]
-
+           cards.append('BB')                     #조커가 있다면 cards리스트에 각각 append해주기 ex) [3C,3H,BB]
+                                                  
        for n in range(1,5):
            plays.extend(combinations(cards, n))
 
    plays = list(set(plays))  #combinations함수에서 n=1일때 발생하는 하나 짜리 조커 중복 제거 ex)[B],[B]
+
+   for i in range(len(plays)):
+
+       if len(plays[i]) != 1 and 'BB' in plays[i]:
+           plays[i] = list(plays[i])
+           plays[i][-1] = plays[i][0][0]+'B'
+
+           plays[i]=tuple(plays[i])
+
 
    # Generate straights
    suited = cards_by_index(hand,1)
