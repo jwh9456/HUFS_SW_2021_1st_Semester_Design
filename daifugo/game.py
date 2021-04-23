@@ -261,7 +261,7 @@ def play_game(players, invalid_action='raise', initial_deal=None):  # invalid_ac
     # assert는 뒤의 조건이 True가 아니면 AssertError를 발생
 
     print("::::::::::대부호 게임 시작::::::::::\n")
-    print("플레이어 수는 4명으로 고정합니다.\n")
+    print("플레이어 수는 {0}명입니다.\n".format(len(players)))
 
 
     lp_hist = []  #last player history
@@ -269,22 +269,19 @@ def play_game(players, invalid_action='raise', initial_deal=None):  # invalid_ac
     
     if initial_deal is None:
         print("패를 나누겠습니다.\n")
-        initial_deal = deal()
+        initial_deal = deal(len(players))
         
         print("나눠진 패는 다음과 같습니다.\n")
-        print("player1 :",initial_deal[0])
-        print("player2 :",initial_deal[1])
-        print("player3 :",initial_deal[2])
-        print("player4 :",initial_deal[3])
+        for i in range(len(players)):
+            print("player{0} :". format(i+1),initial_deal[i],)
+        
         print()
 
     else:
         initial_deal = copy.deepcopy(initial_deal)
         print("지금까지의 각 플레이어의 패의 상황입니다.\n")
-        print("player1 :",initial_deal[0])
-        print("player2 :",initial_deal[1])
-        print("player3 :",initial_deal[2])
-        print("player4 :",initial_deal[3])
+        for i in range(len(players)):
+            print("player{0} :". format(i+1),initial_deal[i],)
         print()
 
      # 적어도 한 번 플레이
@@ -306,5 +303,5 @@ def play_game(players, invalid_action='raise', initial_deal=None):  # invalid_ac
         lp_hist.append(lp)
     return lp_hist, discard, hands_hist
 
-players = ('A','B','C','D')
+players = ('A','B','C')
 play_game(players)
