@@ -105,6 +105,9 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
     while True:
         player = players[index]
         hand = hands[index]
+        if len(hand) == 0:
+          index = (index + 1) % num_players
+          continue
         holding = tuple(len(hands[(index+i)%num_players]) for i in range(num_players)) 
         #3명..?? 4명으로 돌리려면 range(num_players)로 범위 바꾸기
         
@@ -309,6 +312,8 @@ def play_game(players, invalid_action='raise', initial_deal=None):  # invalid_ac
       for i in range(len(players)):
           if len(hands[i]) == 0:
               breakOut += 1
+              
+      game_over = False
         
     return lp_hist, discard, hands_hist
 
