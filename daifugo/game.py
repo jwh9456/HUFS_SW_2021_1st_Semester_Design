@@ -47,6 +47,10 @@ def deal(players=4):  # 카드 배분하기
 
 def ishachikire(play):  # 하치키레 구현
     hachikire = True
+    
+    if 'BB' in play and len(play) == 1:
+        hachikire = False
+        return hachikire
 
     if 'BB' in play:
         for i in range(len(play)):
@@ -216,7 +220,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
                 print("ROUND OVER: hachikire - LP {0}".format(last_player))
                 return hands, last_player, False, discard
 
-        elif prev is not None and len(prev) == 1 and prev[-1][0] == 'B':
+        elif play is not None and 'BB' in play and len(play) == 1:
             # 단독으로 'BB' 만 냈을 경우
             if DEBUG: print("ROUND OVER: B played - LP {0}".format(last_player))
             # 마지막 사람이 이김
@@ -231,6 +235,15 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
                 return hands, last_player, False, discard
 
         elif common.REV == True and prev is not None:
+             if len(prev) == 1 and prev[0][0] == '3':
+                if 'BB' in hands[(index + 1) % num_players]:
+                    index = (index + 1) % num_players
+                    print("{0} 번 플레이어로 차례가 넘어갑니다.\n".format(index))
+                    continue
+                else:
+                    if DEBUG: print("ROUND OVER: 3 played in REV - LP {0}".format(last_player))
+                    return hands, last_player, False, discard
+                  
             if prev[0][0] == '3' and (prev[-1][0] == '3' or prev[-1][0] == 'B'):
                 if DEBUG: print("ROUND OVER: 3 played in REV - LP {0}".format(last_player))
                 return hands, last_player, False, discard
@@ -245,6 +258,15 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
                     return hands, last_player, False, discard
 
         elif common.REV == False and prev is not None:
+            if len(prev) == 1 and prev[0][0] == '2':
+                if 'BB' in hands[(index + 1) % num_players]:
+                    index = (index + 1) % num_players
+                    print("{0} 번 플레이어로 차례가 넘어갑니다.\n".format(index))
+                    continue
+                else:
+                    if DEBUG: print("ROUND OVER: 2 played - LP {0}".format(last_player))
+                    return hands, last_player, False, discard
+                  
             if prev[0][0] == '2' and (prev[-1][0] == '2' or prev[-1][0] == 'B'):
                 if DEBUG: print("ROUND OVER: 2 played - LP {0}".format(last_player))
                 return hands, last_player, False, discard
