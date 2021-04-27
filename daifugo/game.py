@@ -102,6 +102,13 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
     last_player=first_player   # 끝낸 사람이 처음으로 다시 시작.
     index = first_player  # index = 처음사람
 
+    if len(discard[0]) == 0:
+        for elem in range(len(hands)):
+            if '3D' in hands[elem]:
+                index = elem
+                break
+
+
     while True:
         player = players[index]
         hand = hands[index]
