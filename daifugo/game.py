@@ -333,6 +333,7 @@ def play_game(players, invalid_action='raise', initial_deal=None):  # invalid_ac
     winner = []
     
     while (breakOut < len(players)):
+      breakOut = 0
       while not game_over:
         print("라운드를 다시 시작합니다.")
         hands, lp, game_over, discard = play_round(hands, players, discard, lp)  #lp : 마지막에 낸 사람
