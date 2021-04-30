@@ -328,23 +328,25 @@ def play_game(players, invalid_action='raise', initial_deal=None):  # invalid_ac
     hands_hist.append(copy.deepcopy(hands))
     lp_hist.append(lp)
     
-    breakOut = 0 #빈 hands 개수 셈
     
-    while (breakOut < 3):
+    breakOut = 0 #빈 hands 개수 셈
+    winner = []
+    
+    while (breakOut < len(players)):
       while not game_over:
         print("라운드를 다시 시작합니다.")
         hands, lp, game_over, discard = play_round(hands, players, discard, lp)  #lp : 마지막에 낸 사람
         print("라운드가 끝났습니다.")
         hands_hist.append(copy.deepcopy(hands))
         lp_hist.append(lp)
-      
+        
+      if len(hands[lp]) == 0:
+            winner.append(players[lp])
+          
       for i in range(len(players)):
           if len(hands[i]) == 0:
               breakOut += 1
               
       game_over = False
         
-    return lp_hist, discard, hands_hist
-
-players = ('A','B','C', 'D')
-play_game(players)
+    return winner
