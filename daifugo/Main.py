@@ -1,4 +1,6 @@
+from daifugo.game import DEBUG
 import game
+DEBUG = True
 
 
 # 대부호 > 부호 > 빈민 > 평민
@@ -38,28 +40,28 @@ max = 0
 round = 1
 
 while (max < 18):
-    print("::::::::::대부호 게임 시작::::::::::\n")
-    print(round, "round를 시작하겠습니다\n")
+    if DEBUG: print("::::::::::대부호 게임 시작::::::::::\n")
+    if DEBUG: print(round, "round를 시작하겠습니다\n")
     result = game.play_game(players)
 
-    print("게임이 종료되었습니다.\n")
-    print("\n----- 게임의 결과 -----\n")
+    if DEBUG: print("게임이 종료되었습니다.\n")
+    if DEBUG: print("\n----- 게임의 결과 -----\n")
 
     for i in range(4):
         _player.set_score(players[i], result)
         _player.set_rank(players[i], result)
 
-    print("{0}의 점수 = {1}, {2}의 계급 = {3}".format('A', A.점수, 'A', A.계급))
-    print("{0}의 점수 = {1}, {2}의 계급 = {3}".format('B', B.점수, 'B', B.계급))
-    print("{0}의 점수 = {1}, {2}의 계급 = {3}".format('C', C.점수, 'C', C.계급))
-    print("{0}의 점수 = {1}, {2}의 계급 = {3}".format('D', D.점수, 'D', D.계급))
-    print()
+    if DEBUG:print("{0}의 점수 = {1}, {2}의 계급 = {3}".format('A', A.점수, 'A', A.계급))
+    if DEBUG:print("{0}의 점수 = {1}, {2}의 계급 = {3}".format('B', B.점수, 'B', B.계급))
+    if DEBUG:print("{0}의 점수 = {1}, {2}의 계급 = {3}".format('C', C.점수, 'C', C.계급))
+    if DEBUG:print("{0}의 점수 = {1}, {2}의 계급 = {3}".format('D', D.점수, 'D', D.계급))
+    if DEBUG:print()
 
     for i in range(4):
         if players[i].점수 >= max:
             max = players[i].점수
 
-    print("최대 값:{0}\n".format(max))
+    if DEBUG:print("최대 값:{0}\n".format(max))
     round += 1
 
-print("   대부호 게임 끝   ")
+if DEBUG:print("   대부호 게임 끝   ")

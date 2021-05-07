@@ -18,15 +18,15 @@ def get_deck(shuffle=False):
     suits = 'CSDH'
     ranks = '34567890JQKA2'
 
-    print("덱을 만들겠습니다.")
+    if DEBUG:print("덱을 만들겠습니다.")
     deck = [''.join(c) for c in product(ranks, suits)]  
     # 카드만들기 deck = ['3C', '3S', '3D', '3H', '4C',...,'2H']
     deck.append('BB') # deck에 조커 카드 추가
     if shuffle:
         random.shuffle(deck)
 
-    print("덱이 생성되었습니다.")
-    print(deck)
+    if DEBUG:print("덱이 생성되었습니다.")
+    if DEBUG:print(deck)
     return deck  # 섞인 deck 반환
 
 def deal(players=4):  # 카드 배분하기
@@ -83,7 +83,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
     
     
     num_players = len(players)  # num_players = 4
-    #print("에러 : 플레이어 수와 카드가 분배된 사람의 수가 다릅니다.")
+    #if DEBUG:print("에러 : 플레이어 수와 카드가 분배된 사람의 수가 다릅니다.")
     assert len(hands) == num_players
     # len(hands) != num_players 이면 에러 발생
     
@@ -119,25 +119,25 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         holding = tuple(len(hands[(index+i)%num_players]) for i in range(num_players)) 
         #3명..?? 4명으로 돌리려면 range(num_players)로 범위 바꾸기
         
-        print("각자 가지고 있는 카드의 개수")
-        print(holding)
+        if DEBUG:print("각자 가지고 있는 카드의 개수")
+        if DEBUG:print(holding)
         
         play = interactive.play(prev, hand, discard, holding)
-        print("해당 카드를 선택했습니다.")
-        print(play)
+        if DEBUG:print("해당 카드를 선택했습니다.")
+        if DEBUG:print(play)
         
         if DEBUG: 
           if play is None:
-            print("  {0} ({2} cards) --> {1}".format(index, "pass", len(hands[index])))
+            if DEBUG:print("  {0} ({2} cards) --> {1}".format(index, "pass", len(hands[index])))
           else:
-            print("  {0} ({2} cards) --> {1}".format(index, play, len(hands[index])-len(play)))
-            #print("버리는 사람의 번호", (남은 카드 수) --> [버리는 카드])
+            if DEBUG:print("  {0} ({2} cards) --> {1}".format(index, play, len(hands[index])-len(play)))
+            #if DEBUG:print("버리는 사람의 번호", (남은 카드 수) --> [버리는 카드])
 
         # need to check a play is a valid play
         if play and frozenset(play) not in map(frozenset,common.generate_plays(hand)):
             #플레이가 None 이 아니고, 낼 수 있는 카드 목록에 없다면,
             if DEBUG: 
-                print("  {0} invalid play {1}".format(index, play))
+                if DEBUG:print("  {0} invalid play {1}".format(index, play))
 
             # Force player to pass if their play is invalid
             if invalid_action=='pass':
@@ -148,7 +148,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         if prev is None:  #전에 낸 카드가 없다면
             if play is None:
                 if DEBUG: 
-                    print("  {0} passed as first player".format(index))
+                    if DEBUG:print("  {0} passed as first player".format(index))
                 if invalid_action=='pass':
                     play = None
                 elif invalid_action =='raise':
@@ -159,7 +159,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             # 플레이가 이전 플레이의 맥락에서 유효한지 확인해야합니다.
             if not common.is_valid_play(prev, play):
                 if DEBUG: 
-                    print("  {0} invalid play {1} -> {2}".format(index, prev, play))
+                    if DEBUG:print("  {0} invalid play {1} -> {2}".format(index, prev, play))
                 # Force player to pass if their play is invalid
                 if invalid_action=='pass':
                     play = None
@@ -167,24 +167,24 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
                     raise InvalidAction("player {0} attempted invalid play {1} -> {2}".format(index, prev, play), call_str)
         
         discard[-1].append(play)
-        print("해당 카드를 버립니다.")
-        print(discard[-1])
+        if DEBUG:print("해당 카드를 버립니다.")
+        if DEBUG:print(discard[-1])
         
         revolution = False
         if play is not None and len(play) == 4:
             revolution = True
             if common.REV:
-                print()
-                print("  !!! 혁명 취소 !!!   \n")
+                if DEBUG:print()
+                if DEBUG:print("  !!! 혁명 취소 !!!   \n")
                 common.REV = False
             else:
-                print()
-                print("  !!! 혁명 발생 !!!   \n")
+                if DEBUG:print()
+                if DEBUG:print("  !!! 혁명 발생 !!!   \n")
                 common.REV = True
 
         if play is None:  #선택한 게 없으면
             pass_count += 1  # pass_count 한 번 추가
-            print("지금까지 {0} 번 pass했습니다.\n".format(pass_count))
+            if DEBUG:print("지금까지 {0} 번 pass했습니다.\n".format(pass_count))
         else:       # 선택한 게 있으면
             for i in range(len(play)):
               if play[i][1] == 'B':
@@ -219,7 +219,7 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
 
         elif prev is not None and len(prev) == 1 and prev[-1][0] == 'B':
             # 단독으로 'BB' 만 냈을 경우
-            if DEBUG: print("ROUND OVER: B played - LP {0}".format(last_player))
+            if DEBUG:print("ROUND OVER: B played - LP {0}".format(last_player))
             # 마지막 사람이 이김
             return hands, last_player, False, discard
 
@@ -233,13 +233,13 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
 
         elif common.REV == True and prev is not None:
             if prev[0][0] == '3' and (prev[-1][0] == '3' or prev[-1][0] == 'B'):
-                if DEBUG: print("ROUND OVER: 3 played in REV - LP {0}".format(last_player))
+                if DEBUG:print("ROUND OVER: 3 played in REV - LP {0}".format(last_player))
                 return hands, last_player, False, discard
 
             elif prev[-1][0] == '3':
                 if 'BB' in hands[(index + 1) % num_players]:  # 마지막으로 낸 카드가 3인데, 다음 차례가 'BB'가지고 있으면 계속 진행
                     index = (index + 1) % num_players
-                    print("{0} 번 플레이어로 차례가 넘어갑니다.\n".format(index))
+                    if DEBUG:print("{0} 번 플레이어로 차례가 넘어갑니다.\n".format(index))
                     continue
                 else:  # 마지막으로 낸 카드가 2이고, 다음 차례가 'BB'가 없으면
                     if DEBUG: print("ROUND OVER: 3 played in REV - LP {0}".format(last_player))
@@ -256,14 +256,14 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
                     return hands, last_player, False, discard
                 elif 'BB' in hands[(index + 1) % num_players]: # 마지막으로 낸 카드가 2인데, 다음 차례가 'BB'가지고 있으면 계속 진행
                     index = (index + 1) % num_players
-                    print("{0} 번 플레이어로 차례가 넘어갑니다.\n".format(index))
+                    if DEBUG:print("{0} 번 플레이어로 차례가 넘어갑니다.\n".format(index))
                     continue
                 else: # 마지막으로 낸 카드가 2이고, 다음 차례가 'BB'가 없으면
-                    if DEBUG: print("ROUND OVER: 2 played - LP {0}".format(last_player))
+                    if DEBUG:print("ROUND OVER: 2 played - LP {0}".format(last_player))
                     return hands, last_player, False, discard
 
         index = (index+1) % num_players
-        print("{0} 번 플레이어로 차례가 넘어갑니다.\n".format(index))
+        if DEBUG:print("{0} 번 플레이어로 차례가 넘어갑니다.\n".format(index))
         # index는 다음 플레이어로 +1 
 
 
@@ -271,39 +271,39 @@ def play_game(players, invalid_action='raise', initial_deal=None):  # invalid_ac
     # assert all(callable(p) for p in players)
     # assert는 뒤의 조건이 True가 아니면 AssertError를 발생
 
-    print("::::::::::대부호 게임 시작::::::::::\n")
-    print("플레이어 수는 {0}명입니다.\n".format(len(players)))
+    if DEBUG:print("::::::::::대부호 게임 시작::::::::::\n")
+    if DEBUG:print("플레이어 수는 {0}명입니다.\n".format(len(players)))
 
 
     lp_hist = []  #last player history
     hands_hist = []
     
     if initial_deal is None:
-        print("패를 나누겠습니다.\n")
+        if DEBUG:print("패를 나누겠습니다.\n")
         initial_deal = deal(len(players))
         
-        print("나눠진 패는 다음과 같습니다.\n")
+        if DEBUG:print("나눠진 패는 다음과 같습니다.\n")
         for i in range(len(players)):
-            print("player{0} :". format(i+1),initial_deal[i],)
+            if DEBUG:print("player{0} :". format(i+1),initial_deal[i],)
         
-        print()
+        if DEBUG:print()
 
     else:
         initial_deal = copy.deepcopy(initial_deal)
-        print("지금까지의 각 플레이어의 패의 상황입니다.\n")
+        if DEBUG:print("지금까지의 각 플레이어의 패의 상황입니다.\n")
         for i in range(len(players)):
-            print("player{0} :". format(i+1),initial_deal[i],)
-        print()
+            if DEBUG:print("player{0} :". format(i+1),initial_deal[i],)
+        if DEBUG:print()
 
      # 적어도 한 번 플레이
     hands_hist.append(copy.deepcopy(initial_deal)) 
-    print("게임 시작부터 현재까지의 패의 기록입니다.\n")
-    print(hands_hist)
-    print()
+    if DEBUG:print("게임 시작부터 현재까지의 패의 기록입니다.\n")
+    if DEBUG:print(hands_hist)
+    if DEBUG:print()
 
-    print("게임을 시작합니다.\n")
+    if DEBUG:print("게임을 시작합니다.\n")
     hands, lp, game_over, discard = play_round(initial_deal, players)   # players 의 type -> tuple (p1,p2,p3,p4)
-    print("라운드가 끝났습니다.")
+    if DEBUG:print("라운드가 끝났습니다.")
     hands_hist.append(copy.deepcopy(hands))
     lp_hist.append(lp)
     
@@ -311,9 +311,9 @@ def play_game(players, invalid_action='raise', initial_deal=None):  # invalid_ac
     
     while (breakOut < 3):
       while not game_over:
-        print("라운드를 다시 시작합니다.")
+        if DEBUG:print("라운드를 다시 시작합니다.")
         hands, lp, game_over, discard = play_round(hands, players, discard, lp)  #lp : 마지막에 낸 사람
-        print("라운드가 끝났습니다.")
+        if DEBUG:print("라운드가 끝났습니다.")
         hands_hist.append(copy.deepcopy(hands))
         lp_hist.append(lp)
       
