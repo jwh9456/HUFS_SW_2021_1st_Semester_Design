@@ -1,5 +1,6 @@
 import game
 
+
 # 대부호 > 부호 > 빈민 > 평민
 class _player:
     def __init__(self, 이름, 계급, 점수):
