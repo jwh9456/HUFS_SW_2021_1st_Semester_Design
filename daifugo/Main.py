@@ -1,4 +1,3 @@
-from daifugo.game import DEBUG
 import game
 DEBUG = True
 
