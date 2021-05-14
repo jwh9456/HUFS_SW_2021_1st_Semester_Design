@@ -4,14 +4,14 @@ Interactive player.
 DEBUG = False
 import sys
 from collections import defaultdict
-import new_common as common
 import random
+from monte_carlo_tree_search import MCTS
 
-def play(prev, hand, discard, holding, valid=common.get_valid_plays, generate=common.generate_plays, is_valid=common.is_valid_play):
+def play(prev, hand, discard, holding, player):
   if prev is None:
-    plays = generate(hand)
+    plays = player.generate(hand)
   else:
-    plays = valid(prev,hand)
+    plays = player.valid(prev,hand)
 
   # Just pass straight away if we dont actually have a choice
   if not plays:
@@ -25,7 +25,7 @@ def play(prev, hand, discard, holding, valid=common.get_valid_plays, generate=co
   else:
     new_plays = plays
 
-  new_plays.sort(key=lambda p: (len(p), max(map(common.card_value,p))))
+  new_plays.sort(key=lambda p: (len(p), max(map(player.card_value,p))))
   if DEBUG:print ("PLAYS",new_plays)
 
   discard_summary = defaultdict(list)
@@ -38,14 +38,14 @@ def play(prev, hand, discard, holding, valid=common.get_valid_plays, generate=co
   if discard_summary:
     if DEBUG: print ("    Discard Summary:")
     for suit in sorted(discard_summary):
-      cards = sorted(discard_summary[suit], key=common.card_value)
+      cards = sorted(discard_summary[suit], key=player.card_value)
       ranks = [c[0] for c in cards]
-      disp = ''.join( c if c in ranks else ' ' for c in common.RANKS)
+      disp = ''.join( c if c in ranks else ' ' for c in player.RANKS)
       if DEBUG:print ("      {0}: {1}".format(suit, disp))
 
-  if DEBUG: print ("    Hand: {0}".format(sorted(hand, key=common.card_value)))
+  if DEBUG: print ("    Hand: {0}".format(sorted(hand, key=player.card_value)))
   if prev is not None:
-    if DEBUG: print ("    Prev: {0}".format(sorted(prev, key=common.card_value)))
+    if DEBUG: print ("    Prev: {0}".format(sorted(prev, key=player.card_value)))
   #if DEBUG:print ("    [0] Pass")
   for i, play in enumerate(new_plays):
     if DEBUG: print ("    [{0}] {1}".format(i+1, play))
@@ -65,4 +65,3 @@ def play(prev, hand, discard, holding, valid=common.get_valid_plays, generate=co
     except:
       if DEBUG:print("    올바른 번호를 입력해 주세요")
       continue
-    
