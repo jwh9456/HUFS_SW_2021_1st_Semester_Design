@@ -63,22 +63,6 @@ def deal(players=4):  # 카드 배분하기
         '''
     return hands
 
-def ishachikire(play):  # 하치키레 구현
-    hachikire = True
-
-    if 'BB' in play:
-        for i in range(len(play)):
-            if play[i][0] != '8' and play[i][0] != 'B':
-                hachikire = False
-                break
-    else:
-        for i in range(len(play)):
-            if play[i][0] != '8':
-                hachikire = False
-                break
-
-    return hachikire
-
 class InvalidAction(Exception): # ?? 상속..?
     def __init__(self, reason, call):
         self.reason = reason
@@ -138,11 +122,15 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         
         print("각자 가지고 있는 카드의 개수")
         print(holding)
+        play = interactive.play(prev, hand, discard, holding, common)
+
+        '''
         
         if index == 1 :
             play = interactive.play(prev, hand, discard, holding, common)
         else :
             play = interactive.play(prev, hand, discard, holding, MCTS)
+        '''
 
         print("해당 카드를 선택했습니다.")
         print(play)
@@ -190,18 +178,6 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         discard[-1].append(play)
         print("해당 카드를 버립니다.")
         print(discard[-1])
-        
-        revolution = False
-        if play is not None and len(play) == 4:
-            revolution = True
-            if common.REV:
-                print()
-                print("  !!! 혁명 취소 !!!   \n")
-                common.REV = False
-            else:
-                print()
-                print("  !!! 혁명 발생 !!!   \n")
-                common.REV = True
 
         if play is None:  #선택한 게 없으면
             pass_count += 1  # pass_count 한 번 추가
@@ -216,9 +192,6 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             pass_count = 0 # pass_count 리셋
             last_player = index # 낸 사람이 마지막 사람이 됨.
 
-        
-        if play is not None:
-            hachikire = ishachikire(play)
 
         # Assess end of round
         if len(hands[index]) == 0:
@@ -232,11 +205,6 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             if DEBUG: print("ROUND OVER: All passed - LP {0}".format(last_player))
             # 마지막으로 낸 사람이 이김
             return hands, last_player, False, discard
-          
-        elif play is not None and hachikire:
-             if DEBUG:
-                print("ROUND OVER: hachikire - LP {0}".format(last_player))
-                return hands, last_player, False, discard
 
         elif prev is not None and len(prev) == 1 and prev[-1][0] == 'B':
             # 단독으로 'BB' 만 냈을 경우
@@ -244,13 +212,6 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             # 마지막 사람이 이김
             return hands, last_player, False, discard
 
-        elif revolution:
-            if common.REV == True and prev[0][0] == '2' and (prev[-1][0] == '2' or prev[-1][0] == 'B'):
-                if DEBUG: print("ROUND OVER: 2 played - LP {0}".format(last_player))
-                return hands, last_player, False, discard
-            if common.REV == False and prev[0][0] == '3' and (prev[-1][0] == '3' or prev[-1][0] == 'B'):
-                if DEBUG: print("ROUND OVER: 3 played in REV - LP {0}".format(last_player))
-                return hands, last_player, False, discard
 
         elif common.REV == True and prev is not None:
             if prev[0][0] == '3' and (prev[-1][0] == '3' or prev[-1][0] == 'B'):

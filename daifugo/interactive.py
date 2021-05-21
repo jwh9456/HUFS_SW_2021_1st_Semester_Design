@@ -5,15 +5,11 @@ DEBUG = False
 import sys
 from collections import defaultdict
 import random
-from monte_carlo_tree_search import MCTS
+#from monte_carlo_tree_search import MCTS
 
 def play(prev, hand, discard, holding, player):
-  if prev is None:
-    plays = player.generate(hand)
-  else:
-    plays = player.valid(prev,hand)
-
-  # Just pass straight away if we dont actually have a choice
+  plays = player.generate_plays(hand)
+  
   if not plays:
     return None
   
