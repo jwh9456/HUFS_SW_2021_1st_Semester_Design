@@ -53,14 +53,6 @@ def deal(players=4):  # 카드 배분하기
     for card in deck:
         player = next(players)  #next(players) -> 수정
         player.add(card)
-        '''
-        hands = 
-        ({'4H', '4C', '6D', '5C', 'AH', '7C', '5H', '9D', '3S', '0D', 'JC', '8S', 'KS'},
-        {'2C', '7D', '7S', '9H', '3C', 'QS', 'AC', 'AS', '5D', '9S', 'AD', '0C', 'QD'},
-        {'0S', '4D', '0H', '6H', '6S', '3H', 'KD', '8H', '8C', 'KH', '7H', '6C', 'QH'},
-        {'KC', '8D', 'QC', '2H', '4S', '2D', 'JD', '9C', '3D', '2S', 'JH', 'JS', '5S', 'BB'})
-
-        '''
     return hands
 
 class InvalidAction(Exception): # ?? 상속..?
@@ -76,11 +68,9 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
     """
     Execute simulation of one round of gameplay.
     """
-    tree = MCTS()
+    #tree = MCTS()
     if invalid_action not in ['pass', 'raise']: # invalid_action 은 'pass' or 'raise'
         raise ValueError("invalid_action cannot be '{0}'".format(invalid_action))
-
-        # invalid_action이 pass나 raise 가 아닐 겨우 에러를 일으킴.
     
     
     num_players = len(players)  # num_players = 4
@@ -100,14 +90,13 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
         # discard = [[1라운드에서 버려진 카드],[2라운드에서 버려진 카드]...]
         discard.append([])
 
-    #indices = range(num_players) 왜 있는거지?
     pass_count = 0
     last_player=first_player   # 끝낸 사람이 처음으로 다시 시작.
     index = first_player  # index = 처음사람
 
     if len(discard[0]) == 0:
         for elem in range(len(hands)):
-            if '3D' in hands[elem]:
+            if '3D' in hands[elem]: #3D 가진 사람이 가장 먼저 시작
                 index = elem
                 break
 
@@ -211,21 +200,6 @@ def play_round(hands, players, discard=None, first_player=0, invalid_action='pas
             if DEBUG: print("ROUND OVER: B played - LP {0}".format(last_player))
             # 마지막 사람이 이김
             return hands, last_player, False, discard
-
-
-        elif common.REV == True and prev is not None:
-            if prev[0][0] == '3' and (prev[-1][0] == '3' or prev[-1][0] == 'B'):
-                if DEBUG: print("ROUND OVER: 3 played in REV - LP {0}".format(last_player))
-                return hands, last_player, False, discard
-
-            elif prev[-1][0] == '3':
-                if 'BB' in hands[(index + 1) % num_players]:  # 마지막으로 낸 카드가 3인데, 다음 차례가 'BB'가지고 있으면 계속 진행
-                    index = (index + 1) % num_players
-                    print("{0} 번 플레이어로 차례가 넘어갑니다.\n".format(index))
-                    continue
-                else:  # 마지막으로 낸 카드가 2이고, 다음 차례가 'BB'가 없으면
-                    if DEBUG: print("ROUND OVER: 3 played in REV - LP {0}".format(last_player))
-                    return hands, last_player, False, discard
 
         elif common.REV == False and prev is not None:
             if prev[-1][0] == 'B':

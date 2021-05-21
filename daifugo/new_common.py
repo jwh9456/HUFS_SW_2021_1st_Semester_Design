@@ -5,6 +5,7 @@ from collections import defaultdict
 from itertools import combinations,permutations
 
 RANKS = '34567890JQKA2B'
+REV = False
 
 
 def cards_by_index(cardset, index):
@@ -44,9 +45,9 @@ def straights(cards):
             if test:               #j가 straights라면, retval_j에 append
                 j = list(j)
                 for k in range(2):
-                     if card_value(j[k]) + 1 != (card_value(j[k + 1])):
-                         if j[k] == 'BB':
-                             j[k] = str(RANKS[card_value(j[k+1])-1]) +'B'
+                    if card_value(j[k]) + 1 != (card_value(j[k + 1])):
+                        if j[k] == 'BB':
+                            j[k] = str(RANKS[card_value(j[k+1])-1]) +'B'
                         else:
                             j[k+1] = str(RANKS[card_value(j[k])+1]) + 'B'
 
