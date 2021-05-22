@@ -1,7 +1,7 @@
 
 from collections import defaultdict
 from itertools import combinations, permutations
-from base import Card
+from framework import Card
 from operator import attrgetter
 
 RANKS = '34567890JQKA2B'
