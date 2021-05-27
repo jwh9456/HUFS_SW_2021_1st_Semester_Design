@@ -126,7 +126,28 @@ class PresidentGameState(GameState):
             self.discards)
         return result
 
+def smallest_choice(cards):
+    rank = 17
+    play = None
+    
+    for card in cards:
+        if len(card) == 1 and card[0].rank < rank:
+            rank = card[0].rank
+            play = card
+            
+    return play
 
+def largest_choice(cards):
+    rank = 0
+    play = None
+
+    for card in cards:
+        if len(card) == 1 and card[0].rank > rank:
+            rank = card[0].rank
+            play = card
+
+    return play
+    
 def play_self():
 
     state = PresidentGameState()
@@ -136,10 +157,44 @@ def play_self():
         print(str(state))
         # Use different numbers of iterations (simulations, tree nodes) for different players
         if state.player_to_move == 0:
-            m = ismcts(rootstate=state, itermax=100, verbose=False)
-        else:
-            m = ismcts(rootstate=state, itermax=100, verbose=False)
-        print("Best Move: " + str(m) + "\n")
+            m = ismcts(rootstate=state, itermax=10, verbose=False)
+            print("Best Move: " + str(m) + "\n")
+
+        elif state.player_to_move == 1:
+            cards = state.get_moves()
+
+            for card in cards:
+                print(card, end = " ")
+
+            m = random.choice(cards)
+            print("\nrandom Move: " + str(m) + "\n")
+            
+        elif state.player_to_move == 2:
+            cards = state.get_moves()
+
+            for card in cards:
+                print(card, end=" ")
+
+            if len(cards) == 1 and cards[0] == 'PASS':
+                m = 'PASS'
+            else:
+                m = smallest_choice(cards)
+
+            print("\nsmallest Move: " + str(m) + "\n")
+            
+        elif state.player_to_move == 3:
+            cards = state.get_moves()
+
+            for card in cards:
+                print(card, end=" ")
+
+            if len(cards) == 1 and cards[0] == 'PASS':
+                m = 'PASS'
+            else:
+                m = largest_choice(cards)
+
+            print("\nlargest Move: " + str(m) + "\n")
+
         state.do_move(m)
 
     for p in (0, 1, 2, 3):
