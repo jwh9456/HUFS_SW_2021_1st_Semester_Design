@@ -126,27 +126,6 @@ class PresidentGameState(GameState):
             self.discards)
         return result
 
-def smallest_choice(cards):
-    rank = 17
-    play = None
-    
-    for card in cards:
-        if len(card) == 1 and card[0].rank < rank:
-            rank = card[0].rank
-            play = card
-            
-    return play
-
-def largest_choice(cards):
-    rank = 0
-    play = None
-
-    for card in cards:
-        if len(card) == 1 and card[0].rank > rank:
-            rank = card[0].rank
-            play = card
-
-    return play
     
 def play_self():
 
@@ -178,7 +157,7 @@ def play_self():
             if len(cards) == 1 and cards[0] == 'PASS':
                 m = 'PASS'
             else:
-                m = smallest_choice(cards)
+                m = cards[-2]
 
             print("\nsmallest Move: " + str(m) + "\n")
             
@@ -191,9 +170,14 @@ def play_self():
             if len(cards) == 1 and cards[0] == 'PASS':
                 m = 'PASS'
             else:
-                m = largest_choice(cards)
+                m = cards[-2]
 
             print("\nlargest Move: " + str(m) + "\n")
+            
+        if m != 'PASS':
+            for card in m:
+                if card.suit == 'B':
+                    card.rank = 16
 
         state.do_move(m)
 
