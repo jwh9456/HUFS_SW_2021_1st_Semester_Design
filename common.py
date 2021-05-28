@@ -15,12 +15,12 @@ def cards_by_index(cardset):
             new.append(card)
         cardset = new
 
-
     retval = defaultdict(list)
 
     for card in cardset:
         rank = card.rank
         retval[rank].append(card)
+
     return retval
 
 def cards_by_rank(cardset):
@@ -71,17 +71,20 @@ def straights(cards):
 
         for j in nof:  # j는 각각의 순열 튜플
             test = straights_joker(list(j))
+
             for card in j:
                 if card.suit == 'B':
                     card.rank = 16
+
             if test:  # j가 straights라면, retval_j에 append
+                #j = sorted(j, key=attrgetter('rank', 'suit'))
                 j = list(j)
                 for k in range(2):
                     if int(j[k].rank) + 1 != int(j[k + 1].rank):
                         if j[k].suit == 'B':
-                            j[k] = Card(j[k+1].rank - 1, 'B')
+                            j[k] = Card(j[k+1].rank - 1, 'B')  # = Card(str(j[k + 1].rank), 'B')
                         else:
-                            j[k + 1] = Card(j[k].rank + 1, 'B')
+                            j[k + 1] = Card(j[k].rank + 1, 'B') # = Card(str(j[k].rank), 'B')
 
                 j = tuple(j)
                 retval_j.append(j)
@@ -98,6 +101,7 @@ def straights_joker(cards):  # cards는 각각의 순열들
         while j < i - 1:
             n1 = cards[j]
             n2 = cards[j + 1]
+
             if n1.suit == 'B' and n2.rank != 0:  # n1이 조커라면, j를 늘려가면서 다음 카드들의 rank들이 순차적으로
                 if n1.rank + 1 == n2.rank:
                     return True
@@ -107,7 +111,8 @@ def straights_joker(cards):  # cards는 각각의 순열들
                 temp = n1.rank
 
                 if temp != 2:  # 조커 앞의 카드가 2(가장강한카드)가 아니라면, 조커자리에 n1보다
-                    cards[j + 1].rank = temp + 1 # 한 계단 높은 카드를 삽입하고, 그 뒤의 카드들의 rank 순차적 판단
+                    cards[j + 1].rank = temp + 1
+                    # cards[j + 1] = Card(temp + 1, cards[j + 1].suit) # 한 계단 높은 카드를 삽입하고, 그 뒤의 카드들의 rank 순차적 판단
                     j += 1
                     continue
 
@@ -116,12 +121,14 @@ def straights_joker(cards):  # cards는 각각의 순열들
                         return True
                     else:
                         return False
+
             else:  # 둘다 조커가 아니라면 계속해서 rank판단 후 계속 이어가기
                 if n1.rank + 1 == n2.rank:
                     j += 1
                 else:  # n1, n2가 rank가 두 단계 이상 차이라면 False
                     return False
         return True
+
     else:
         j = 0
         while j < i - 1:
@@ -134,7 +141,7 @@ def straights_joker(cards):  # cards는 각각의 순열들
                 return False
         return True
 
-def generate_plays(hand):  # 내가 낼 수 있는 경우의 수를 plays에 넣어서 return
+def generate_plays(hand):  #내가 낼 수 있는 경우의 수를 plays에 넣어서 return
 
     ranked = cards_by_index(hand)  # ranked는 리스트형 dic
     plays = []
@@ -155,6 +162,8 @@ def generate_plays(hand):  # 내가 낼 수 있는 경우의 수를 plays에 넣
         else:
             retval.append(play)
 
+    #print("333", retval)
+
     for i in range(len(retval)):
         if len(retval[i]) != 1 and Card(16, 'B') in retval[i]:
             retval[i] = list(retval[i])
@@ -163,9 +172,8 @@ def generate_plays(hand):  # 내가 낼 수 있는 경우의 수를 plays에 넣
             retval[i] = tuple(retval[i])
 
     # Generate straights
-    suited = cards_by_index(hand)
+    suited = cards_by_rank(hand)
     for suit in suited:
-        # plays.extend(straights(suited[suit]))
         if Card(16, 'B') in hand and suited[suit][0].rank != 16:
             suited[suit].append(Card(16, 'B'))
         retval.extend(straights(suited[suit]))
@@ -178,11 +186,14 @@ def generate_plays(hand):  # 내가 낼 수 있는 경우의 수를 plays에 넣
         else:
             plays.append(play)
 
+    #print("스트레이트", plays)
+
     return [list(p) for p in plays]
 
 def is_valid_play(prev, play):
     if play is None:
         return True
+
     if prev[0].rank != prev[-1].rank:
         # Previous play is a straight
         s = straights(play)
