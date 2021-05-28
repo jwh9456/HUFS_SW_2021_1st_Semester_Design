@@ -226,15 +226,7 @@ def is_valid_play(prev, play):
 
         if len(play) != len(prev):
             return False
-        elif length != 1:
-            return False
-        elif int(play[0].rank) <= int(prev[0].rank):
-            # Proposed play is not worth more than prev
-            if Card(16, 'B') in play:
-                if play[0].rank <= prev[0].rank:
-                    return False
-                else:
-                    return True
+        elif int(play[0].rank) <= int(prev[-1].rank):
             return False
         else:
             return True
