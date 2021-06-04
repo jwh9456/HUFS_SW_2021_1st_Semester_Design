@@ -243,19 +243,81 @@ def play_self():
                             print_card1 = pygame.image.load(r'./cards/' + str(m[0].rank) + m[0].suit + '.png')
                             print_card2 = pygame.image.load(r'./cards/' + 'back' + '.png')
                             print_card3 = pygame.image.load(r'./cards/' + 'back' + '.png')
-                            score_text = small_font.render("PLAYER{0} ({1}) discard {2}".format(state.player_to_move,player_name,str(m[0].rank)+str(m[0].suit)), True, BLACK)
+                            Rank1 = m[0].rank
+                            Suit1 = m[0].suit
+
+                            if m[0].rank == 14:
+                                Rank1 = "A"
+                            elif m[0].rank == 15:
+                                Rank1 = 2
+                            elif m[0].rank == 16:
+                                Rank1 = "JOKER"
+                                Suit1 = ""
+                            score_text = small_font.render("PLAYER{0} ({1}) discard {2}".format(state.player_to_move,player_name,str(Rank1)+str(Suit1)), True, BLACK)
 
                         elif card_num == 2:
                             print_card1 = pygame.image.load(r'./cards/' + str(m[0].rank) + m[0].suit + '.png')
                             print_card2 = pygame.image.load(r'./cards/' + str(m[1].rank) + m[1].suit + '.png')
                             print_card3 = pygame.image.load(r'./cards/' + 'back' + '.png')
-                            score_text = small_font.render("PLAYER{0} ({1}) discard {2} {3}".format(state.player_to_move,player_name,str(m[0].rank)+str(m[0].suit), str(m[1].rank)+str(m[1].suit)), True, BLACK)
+                            Rank1 = m[0].rank
+                            Suit1 = m[0].suit
+                            Rank2 = m[1].rank
+                            Suit2 = m[1].suit
+
+                            if m[0].rank == 14:
+                                Rank1 = "A"
+                            elif m[0].rank == 15:
+                                Rank1 = 2
+                            elif m[0].rank == 16:
+                                Rank1 = "JOKER"
+                                Suit1 = ""
+
+                            if m[1].rank == 14:
+                                Rank2 = "A"
+                            elif m[1].rank == 15:
+                                Rank2 = 2
+                            elif m[1].rank == 16:
+                                Rank2 = "JOKER"
+                                Suit2 = ""
+                                
+                            score_text = small_font.render("PLAYER{0} ({1}) discard {2} {3}".format(state.player_to_move,player_name,str(Rank1)+str(Suit1), str(Rank2)+str(Suit2)), True, BLACK)
                        
                         elif card_num == 3:
                             print_card1 = pygame.image.load(r'./cards/' + str(m[0].rank) + m[0].suit + '.png')
                             print_card2 = pygame.image.load(r'./cards/' + str(m[1].rank) + m[1].suit + '.png')
                             print_card3 = pygame.image.load(r'./cards/' + str(m[2].rank) + m[2].suit + '.png')
-                            score_text = small_font.render("PLAYER{0} ({1}) discard {2} {3} {4}".format(state.player_to_move,player_name,str(m[0].rank)+str(m[0].suit), str(m[1].rank)+str(m[1].suit),str(m[2].rank)+str(m[2].suit)), True, BLACK)
+
+                            Rank1 = m[0].rank
+                            Suit1 = m[0].suit
+                            Rank2 = m[1].rank
+                            Suit2 = m[1].suit
+                            Rank3 = m[2].rank
+                            Suit3 = m[2].suit
+
+                            if m[0].rank == 14:
+                                Rank1 = "A"
+                            elif m[0].rank == 15:
+                                Rank1 = 2
+                            elif m[0].rank == 16:
+                                Rank1 = "JOKER"
+                                Suit1 = ""
+
+                            if m[1].rank == 14:
+                                Rank2 = "A"
+                            elif m[1].rank == 15:
+                                Rank2 = 2
+                            elif m[1].rank == 16:
+                                Rank2 = "JOKER"
+                                Suit2 = ""
+
+                            if m[2].rank == 14:
+                                Rank3 = "A"
+                            elif m[2].rank == 15:
+                                Rank3 = 2
+                            elif m[2].rank == 16:
+                                Rank3 = "JOKER"
+                                Suit3 = ""
+                            score_text = small_font.render("PLAYER{0} ({1}) discard {2} {3} {4}".format(state.player_to_move,player_name,str(Rank1)+str(Suit1), str(Rank2)+str(Suit2),str(Rank3)+str(Suit3)), True, BLACK)
 
                     else:
                         print_card1 = pygame.image.load(r'./cards/' + 'back' + '.png')
