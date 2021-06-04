@@ -197,4 +197,6 @@ def ismcts(rootstate, itermax, verbose=False, quiet=False):
     elif not quiet:
         print(rootnode.children_to_string())
 
-    return max(rootnode.child_nodes, key=lambda c: c.visits).move  # return the move that was most visited
+    best_mcts = max(rootnode.child_nodes, key=lambda c: c.visits)
+
+    return (best_mcts.move,best_mcts.visits, best_mcts.wins)  # return the move that was most visited

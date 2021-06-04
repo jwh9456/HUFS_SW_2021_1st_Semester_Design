@@ -136,7 +136,7 @@ def play_self():
         print(str(state))
         # Use different numbers of iterations (simulations, tree nodes) for different players
         if state.player_to_move == 0:
-            m = ismcts(rootstate=state, itermax=10, verbose=False)
+            m,v,w = ismcts(rootstate=state, itermax=10, verbose=False)
             print("Best Move: " + str(m) + "\n")
 
         elif state.player_to_move == 1:
