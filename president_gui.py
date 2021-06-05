@@ -134,7 +134,7 @@ def play_self():
     MARGIN_TOP = 200
  
     # WINDOW SIZE
-    WIDTH = 800
+    WIDTH = 900
     HEIGHT = 460
  
     # COLORS
@@ -162,6 +162,7 @@ def play_self():
     print_card1 = pygame.image.load(r'./cards/' + 'back' + '.png')
     print_card2 = pygame.image.load(r'./cards/' + 'back' + '.png')
     print_card3 = pygame.image.load(r'./cards/' + 'back' + '.png')
+    print_card4 = pygame.image.load(r'./cards/' + 'back' + '.png')
     
 
     while True:
@@ -188,7 +189,7 @@ def play_self():
                         m,v,w = ismcts(rootstate=state, itermax=10, verbose=False)
 
                         if v!=0:
-                            mcts_winningRate = w/v
+                            mcts_winningRate = w/v*100
                         else:
                             mcts_winningRate = 0
                         
@@ -213,7 +214,7 @@ def play_self():
                         if len(cards) == 1 and cards[0] == 'PASS':
                             m = 'PASS'
                         else:
-                            m = cards[-2]
+                            m = cards[0]
                         player_name = "SMALL"
 
                         print("\nsmallest Move: " + str(m) + "\n")
@@ -243,6 +244,7 @@ def play_self():
                             print_card1 = pygame.image.load(r'./cards/' + str(m[0].rank) + m[0].suit + '.png')
                             print_card2 = pygame.image.load(r'./cards/' + 'back' + '.png')
                             print_card3 = pygame.image.load(r'./cards/' + 'back' + '.png')
+                            print_card4 = pygame.image.load(r'./cards/' + 'back' + '.png')
                             Rank1 = m[0].rank
                             Suit1 = m[0].suit
 
@@ -259,6 +261,7 @@ def play_self():
                             print_card1 = pygame.image.load(r'./cards/' + str(m[0].rank) + m[0].suit + '.png')
                             print_card2 = pygame.image.load(r'./cards/' + str(m[1].rank) + m[1].suit + '.png')
                             print_card3 = pygame.image.load(r'./cards/' + 'back' + '.png')
+                            print_card4 = pygame.image.load(r'./cards/' + 'back' + '.png')
                             Rank1 = m[0].rank
                             Suit1 = m[0].suit
                             Rank2 = m[1].rank
@@ -286,7 +289,7 @@ def play_self():
                             print_card1 = pygame.image.load(r'./cards/' + str(m[0].rank) + m[0].suit + '.png')
                             print_card2 = pygame.image.load(r'./cards/' + str(m[1].rank) + m[1].suit + '.png')
                             print_card3 = pygame.image.load(r'./cards/' + str(m[2].rank) + m[2].suit + '.png')
-
+                            print_card4 = pygame.image.load(r'./cards/' + 'back' + '.png')
                             Rank1 = m[0].rank
                             Suit1 = m[0].suit
                             Rank2 = m[1].rank
@@ -318,11 +321,62 @@ def play_self():
                                 Rank3 = "JOKER"
                                 Suit3 = ""
                             score_text = small_font.render("PLAYER{0} ({1}) discard {2} {3} {4}".format(state.player_to_move,player_name,str(Rank1)+str(Suit1), str(Rank2)+str(Suit2),str(Rank3)+str(Suit3)), True, BLACK)
+                        elif card_num == 4:
+                            print_card1 = pygame.image.load(r'./cards/' + str(m[0].rank) + m[0].suit + '.png')
+                            print_card2 = pygame.image.load(r'./cards/' + str(m[1].rank) + m[1].suit + '.png')
+                            print_card3 = pygame.image.load(r'./cards/' + str(m[2].rank) + m[2].suit + '.png')
+                            print_card4 = pygame.image.load(r'./cards/' + str(m[3].rank) + m[3].suit + '.png')
+
+                            Rank1 = m[0].rank
+                            Suit1 = m[0].suit
+                            Rank2 = m[1].rank
+                            Suit2 = m[1].suit
+                            Rank3 = m[2].rank
+                            Suit3 = m[2].suit
+                            Rank4 = m[3].rank
+                            Suit4 = m[3].suit
+
+
+
+                            if m[0].rank == 14:
+                                Rank1 = "A"
+                            elif m[0].rank == 15:
+                                Rank1 = 2
+                            elif m[0].rank == 16:
+                                Rank1 = "JOKER"
+                                Suit1 = ""
+
+                            if m[1].rank == 14:
+                                Rank2 = "A"
+                            elif m[1].rank == 15:
+                                Rank2 = 2
+                            elif m[1].rank == 16:
+                                Rank2 = "JOKER"
+                                Suit2 = ""
+
+                            if m[2].rank == 14:
+                                Rank3 = "A"
+                            elif m[2].rank == 15:
+                                Rank3 = 2
+                            elif m[2].rank == 16:
+                                Rank3 = "JOKER"
+                                Suit3 = ""
+
+                            if m[3].rank == 14:
+                                Rank4 = "A"
+                            elif m[3].rank == 15:
+                                Rank4 = 2
+                            elif m[3].rank == 16:
+                                Rank4 = "JOKER"
+                                Suit4 = ""
+                            score_text = small_font.render("PLAYER{0} ({1}) discard {2} {3} {4} {5}".format(state.player_to_move,player_name,str(Rank1)+str(Suit1), str(Rank2)+str(Suit2),str(Rank3)+str(Suit3),str(Rank4)+str(Suit4)), True, BLACK)
+                            
 
                     else:
                         print_card1 = pygame.image.load(r'./cards/' + 'back' + '.png')
                         print_card2 = pygame.image.load(r'./cards/' + 'back' + '.png')
                         print_card3 = pygame.image.load(r'./cards/' + 'back' + '.png')
+                        print_card4 = pygame.image.load(r'./cards/' + 'back' + '.png')
                         score_text = small_font.render("PLAYER{0} ({1}) PASS".format(state.player_to_move,player_name), True, BLACK)
                         
 
@@ -332,24 +386,26 @@ def play_self():
                     print_card1 = pygame.transform.scale(print_card1 , (100,160))
                     print_card2 = pygame.transform.scale(print_card2 , (100,160))
                     print_card3 = pygame.transform.scale(print_card3 , (100,160))
+                    print_card4 = pygame.transform.scale(print_card4 , (100,160))
                     screen.blit(print_card1, (MARGIN_LEFT,MARGIN_TOP))
                     screen.blit(print_card2, (MARGIN_LEFT+120, MARGIN_TOP))
                     screen.blit(print_card3, (MARGIN_LEFT+240, MARGIN_TOP))
+                    screen.blit(print_card4, (MARGIN_LEFT+360, MARGIN_TOP))
 
-                    
 
-                    # 낸 카드 출력
-                    pygame.draw.rect(screen, WHITE, [100, 40, 600, 120])
+
+                    #스코어 보드 출력
+                    pygame.draw.rect(screen, WHITE, [100, 40, 700, 120])
                     score_text_rect = score_text.get_rect()
-                    score_text_rect.center = (400, 100)
+                    score_text_rect.center = (450, 100)
                     screen.blit(score_text, score_text_rect)
 
                     # 승률계산
                     pygame.draw.rect(screen, WHITE, [60, MARGIN_TOP, 280, 200])
                     
-                    if state.player_to_move == 0:
+                    if state.player_to_move == 0 and m != "PASS":
                         winning_player = small_font.render("MCTS winning rate", True, BLACK)
-                        winning_rate = large_font.render("{0}%".format(mcts_winningRate), True, BLUE)
+                        winning_rate = large_font.render("{:.2f}%".format(mcts_winningRate), True, BLUE)
                         
                     else:
                         winning_player = small_font.render("player", True, BLACK)
@@ -384,14 +440,15 @@ def play_self():
         screen.blit(print_card1, (MARGIN_LEFT,MARGIN_TOP))
         screen.blit(print_card2, (MARGIN_LEFT+120, MARGIN_TOP))
         screen.blit(print_card3, (MARGIN_LEFT+240, MARGIN_TOP))
+        screen.blit(print_card4, (MARGIN_LEFT+360, MARGIN_TOP))
 
 
         if over == True:
             # rect(왼쪽x, 위y, 너비, 높이)순서
-            pygame.draw.rect(screen, WHITE, [100, 40, 600, 120])
+            pygame.draw.rect(screen, WHITE, [100, 40, 700, 120])
             score_text = large_font.render("PLAYER {0} WINS!!".format(winner), True, BLACK)
             score_text_rect = score_text.get_rect()
-            score_text_rect.center = (400, 100)
+            score_text_rect.center = (450, 100)
             screen.blit(score_text, score_text_rect)
  
         # Update the display after each game loop
