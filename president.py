@@ -136,7 +136,7 @@ def play_self():
         print(str(state))
         # Use different numbers of iterations (simulations, tree nodes) for different players
         if state.player_to_move == 0:
-            m,v,w = ismcts(rootstate=state, itermax=10, verbose=False)
+            m,v,w = ismcts(rootstate=state, itermax=100, verbose=False)
             print("Best Move: " + str(m) + "\n")
 
         elif state.player_to_move == 1:
@@ -157,7 +157,7 @@ def play_self():
             if len(cards) == 1 and cards[0] == 'PASS':
                 m = 'PASS'
             else:
-                m = cards[-2]
+                m = cards[0]
 
             print("\nsmallest Move: " + str(m) + "\n")
             
@@ -184,6 +184,7 @@ def play_self():
     for p in (0, 1, 2, 3):
         if state.get_result(p) > 0:
             print("Player " + str(p) + " wins!")
+            return p
 
 if __name__ == "__main__":
     play_self()

@@ -154,8 +154,8 @@ def play_self():
     pygame.display.set_caption("Daifugo")
  
     # Types of fonts to be used
-    small_font = pygame.font.Font(None, 40)
-    large_font = pygame.font.Font(None, 60)
+    small_font = pygame.font.SysFont('Arial', 40)
+    large_font = pygame.font.SysFont('Arial', 60)
 
     over = False
 
@@ -186,7 +186,7 @@ def play_self():
                     # Use different numbers of iterations (simulations, tree nodes) for different players
                     if state.player_to_move == 0:
                         player_name = "MCTS"
-                        m,v,w = ismcts(rootstate=state, itermax=10, verbose=False)
+                        m,v,w = ismcts(rootstate=state, itermax=70, verbose=False)
 
                         if v!=0:
                             mcts_winningRate = w/v*100
@@ -195,7 +195,7 @@ def play_self():
                         
                         print("Best Move: " + str(m) + "\n")
 
-                    elif state.player_to_move == 1:
+                    elif state.player_to_move in [1, 2, 3]:
                         cards = state.get_moves()
                         
                         for card in cards:
@@ -205,34 +205,34 @@ def play_self():
                         
                         print("\nrandom Move: " + str(m) + "\n")
             
-                    elif state.player_to_move == 2:
-                        cards = state.get_moves()
+                    # elif state.player_to_move == 3:
+                    #     cards = state.get_moves()
                         
-                        for card in cards:
-                            print(card, end=" ")
+                    #     for card in cards:
+                    #         print(card, end=" ")
                         
-                        if len(cards) == 1 and cards[0] == 'PASS':
-                            m = 'PASS'
-                        else:
-                            m = cards[0]
-                        player_name = "SMALL"
+                    #     if len(cards) == 1 and cards[0] == 'PASS':
+                    #         m = 'PASS'
+                    #     else:
+                    #         m = cards[0]
+                    #     player_name = "SMALL"
 
-                        print("\nsmallest Move: " + str(m) + "\n")
+                    #     print("\nsmallest Move: " + str(m) + "\n")
             
-                    elif state.player_to_move == 3:
-                        cards = state.get_moves()
+                    # elif state.player_to_move == 0:
+                    #     cards = state.get_moves()
                         
-                        for card in cards:
-                           print(card, end=" ")
+                    #     for card in cards:
+                    #        print(card, end=" ")
                         
-                        if len(cards) == 1 and cards[0] == 'PASS':
-                            m = 'PASS'
-                        else:
-                            m = cards[-2]
+                    #     if len(cards) == 1 and cards[0] == 'PASS':
+                    #         m = 'PASS'
+                    #     else:
+                    #         m = cards[-2]
                             
-                        player_name = "LARGE"
+                    #     player_name = "LARGE"
 
-                        print("\nlargest Move: " + str(m) + "\n")
+                    #     print("\nlargest Move: " + str(m) + "\n")
             
                     if m != 'PASS':
                         for card in m:
@@ -402,7 +402,6 @@ def play_self():
 
                     # 승률계산
                     pygame.draw.rect(screen, WHITE, [60, MARGIN_TOP, 280, 200])
-                    
                     if state.player_to_move == 0 and m != "PASS":
                         winning_player = small_font.render("MCTS winning rate", True, BLACK)
                         winning_rate = large_font.render("{:.2f}%".format(mcts_winningRate), True, BLUE)
@@ -422,9 +421,9 @@ def play_self():
                     screen.blit(winning_rate, winning_rate_rect)
                         
 
-
                     time.sleep(1)
                     pygame.display.update()
+                    
                     state.do_move(m)
 
                 for p in (0, 1, 2, 3):
@@ -432,6 +431,7 @@ def play_self():
                         print("Player " + str(p) + " wins!")
                         winner = p
                         over = True
+                        return winner
         
         
         # Setting up all the buttons, images and texts on the screen
@@ -455,4 +455,15 @@ def play_self():
         pygame.display.update()
 
 if __name__ == "__main__":
-    play_self()
+    output = []
+    for i in range(1,200):
+        result = play_self()
+        if result == 0 : output.append("mcts")
+        if result == 1 : output.append("rand1")
+        if result == 2 : output.append("rand2")
+        if result == 3 : output.append("rand3")
+        print("try",i," : ")
+        print(output.count('mcts'))
+        print(output.count('rand1'))
+        print(output.count('rand2'))
+        print(output.count('rand3'))
